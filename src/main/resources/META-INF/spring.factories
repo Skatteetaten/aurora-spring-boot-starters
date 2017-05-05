@@ -1,1 +1,2 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=ske.aurora.openshift.referanse.springboot.config.ApplicationConfig
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  ske.aurora.openshift.referanse.springboot.config.ApplicationConfig
