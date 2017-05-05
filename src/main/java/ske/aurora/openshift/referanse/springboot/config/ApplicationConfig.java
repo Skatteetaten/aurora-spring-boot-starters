@@ -71,42 +71,7 @@ public class ApplicationConfig extends MetricsConfigurerAdapter {
         return createAuroraPropertySource("auroraConfig[env]", "AURORA_ENV_PREFIX");
     }
 
-    @Bean
-    public PropertiesPropertySource auroraDbProperties() throws IOException {
 
-        Properties props = new Properties();
-        props.put("flyway.out-of-order", true);
-        PropertiesPropertySource imageProps = new PropertiesPropertySource("auroraDb", props);
-        env.getPropertySources().addLast(imageProps);
-
-        return imageProps;
-    }
-
-    @Bean
-    public PropertiesPropertySource auroraActuatorProperties() {
-
-        Properties props = new Properties();
-        props.put("endpoints.auditevents.enabled", false);
-        props.put("endpoints.heapdump.enabled", false);
-        props.put("endpoints.metrics.enabled", false);
-        props.put("endpoints.logfile.enabled", false);
-        props.put("endpoints.autoconfig.enabled", false);
-        props.put("endpoints.configprops.enabled", false);
-        props.put("endpoints.mappings.enabled", false);
-        props.put("endpoints.beans.enabled", false);
-        props.put("endpoints.dump.enabled", false);
-        props.put("endpoints.jolokia.enabled", false);
-
-        props.put("management.health.status.order", "DOWN, OUT_OF_SERVICE, UNKNOWN, OBSERVE, UP");
-        props.put("management.security.enabled", false);
-        props.put("spring.jackson.date-format", "com.fasterxml.jackson.databind.util.ISO8601DateFormat");
-        props.put("aurora.metrics.prometheus.endpoint", "/prometheus");
-        props.put("aurora.metrics.prometheus.statusCodeMetric.mappings", "/api/*");
-        PropertiesPropertySource imageProps = new PropertiesPropertySource("auroraActuator", props);
-
-        env.getPropertySources().addLast(imageProps);
-        return imageProps;
-    }
 
     /**
      * Creates a PropertySource for some of the environment variables that exposed via the OpenShift deployment
