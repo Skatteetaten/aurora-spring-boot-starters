@@ -1,4 +1,4 @@
-package ske.aurora.openshift.referanse.springboot.config;
+package ske.aurora.config;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,9 +16,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertiesPropertySource;
 
-import com.ryantenney.metrics.spring.config.annotation.EnableMetrics;
-import com.ryantenney.metrics.spring.config.annotation.MetricsConfigurerAdapter;
-
 import ske.aurora.filter.logging.AuroraHeaderFilter;
 
 /**
@@ -26,8 +23,7 @@ import ske.aurora.filter.logging.AuroraHeaderFilter;
  * probably not change very much (know why, at the very least).
  */
 @Configuration
-@EnableMetrics
-public class ApplicationConfig extends MetricsConfigurerAdapter {
+public class ApplicationConfig {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationConfig.class);
 
@@ -42,7 +38,7 @@ public class ApplicationConfig extends MetricsConfigurerAdapter {
     @Bean
     public FilterRegistrationBean auroraHeaderFilter() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.addUrlPatterns("/api/*");
+        registration.addUrlPatterns("/*");
         registration.setFilter(new AuroraHeaderFilter());
         return registration;
     }
@@ -70,8 +66,6 @@ public class ApplicationConfig extends MetricsConfigurerAdapter {
     public PropertiesPropertySource configProperties() {
         return createAuroraPropertySource("auroraConfig[env]", "AURORA_ENV_PREFIX");
     }
-
-
 
     /**
      * Creates a PropertySource for some of the environment variables that exposed via the OpenShift deployment

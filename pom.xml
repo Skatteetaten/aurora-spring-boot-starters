@@ -1,14 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>ske.aurora.openshift.springboot</groupId>
-  <artifactId>aurora-openshift-spring-boot-starter</artifactId>
-  <version>0.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
+  <groupId>ske.aurora.springboot</groupId>
+  <artifactId>aurora-spring-boot-starter-parent</artifactId>
+  <version>0.1</version>
+  <packaging>pom</packaging>
 
 
-  <name>aurora-openshift-spring-boot-starter</name>
-  <description>Starter for spring boot projects on Aurora Openshift</description>
+  <name>aurora-spring-boot-starter-parent</name>
+  <description>Parent for all aurora spring-boot-starters</description>
 
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -20,6 +20,12 @@
   <prerequisites>
     <maven>${maven.min-version}</maven>
   </prerequisites>
+
+  <modules>
+    <module>aurora</module>
+    <module>aurora-oracle</module>
+    <module>aurora-spock</module>
+  </modules>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -168,39 +174,5 @@
     </plugins>
   </build>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-actuator</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-hateoas</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>ske.aurora</groupId>
-      <artifactId>aurora-header-mdc-filter</artifactId>
-      <version>1.1.9</version>
-    </dependency>
-    <dependency>
-      <groupId>ske.aurora.springboot.prometheus</groupId>
-      <artifactId>spring-boot-prometheus</artifactId>
-      <version>3.1.2</version>
-    </dependency>
-    <dependency>
-      <groupId>com.ryantenney.metrics</groupId>
-      <artifactId>metrics-spring</artifactId>
-      <version>3.1.3</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-devtools</artifactId>
-    </dependency>
-
-  </dependencies>
 </project>
 

@@ -1,0 +1,50 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>aurora-spock-spring-boot-starter</artifactId>
+  <version>0.1</version>
+  <packaging>jar</packaging>
+
+  <name>aurora-spock-spring-boot-starter</name>
+  <description>Starter for spock testing on Aurora Openshift</description>
+
+  <parent>
+    <groupId>ske.aurora.springboot</groupId>
+    <artifactId>aurora-spring-boot-starter-parent</artifactId>
+    <version>0.1</version>
+  </parent>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.restdocs</groupId>
+      <artifactId>spring-restdocs-mockmvc</artifactId>
+      <version>1.2.0.RELEASE</version>
+    </dependency>
+    <dependency>
+      <groupId>org.spockframework</groupId>
+      <artifactId>spock-core</artifactId>
+      <version>1.0-groovy-2.4</version>
+    </dependency>
+    <!-- Valgfrie avhengigheter ved bruk av spock -->
+    <dependency> <!-- bruk en bestemt versjon av groovy (istedenfor den som settes av spock-core -->
+      <groupId>org.codehaus.groovy</groupId>
+      <artifactId>groovy-all</artifactId>
+      <version>2.4.1</version>
+    </dependency>
+    <dependency> <!-- for å kunne mocke klasser (ikke bare interface) -->
+      <groupId>cglib</groupId>
+      <artifactId>cglib-nodep</artifactId>
+      <version>3.1</version>
+    </dependency>
+    <dependency> <!-- for å kunne mocke klasser uten default konstruktør -->
+      <groupId>org.objenesis</groupId>
+      <artifactId>objenesis</artifactId>
+      <version>2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+    </dependency>
+  </dependencies>
+</project>
+
