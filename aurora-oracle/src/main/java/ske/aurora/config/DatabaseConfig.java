@@ -49,7 +49,7 @@ public class DatabaseConfig {
 
         return DataSourceBuilder.create()
             .url(props.getProperty("jdbc.url"))
-            .username(props.getProperty("jdbc.username"))
+            .username(props.getProperty("jdbc.user"))
             .password(props.getProperty("jdbc.password"))
             .build();
     }
