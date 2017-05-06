@@ -45,7 +45,8 @@ public class DatabaseConfig {
             return null;
         }
 
-        LOG.debug("Found database property with url" + props.getProperty("jdbc.url"));
+        LOG.debug("Found database property with url:{}, username:{}, password:{}",
+            props.getProperty("jdbc.url"), props.getProperty("jdbc.user"), props.getProperty("jdbc.password").length());
 
         return DataSourceBuilder.create()
             .url(props.getProperty("jdbc.url"))
