@@ -20,6 +20,7 @@ public final class Execute {
 
     private final Histogram executions;
 
+
     public Execute() {
         executions = Histogram.build()
             .name("execute")
@@ -54,6 +55,7 @@ public final class Execute {
     }
     @PostConstruct
     public void registerInstance() {
+        logger.debug("Register execute instance");
         instance = this;
     }
 }

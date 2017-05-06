@@ -11,11 +11,11 @@ import org.springframework.web.client.RestTemplate;
 import io.prometheus.client.CollectorRegistry;
 import okhttp3.OkHttpClient;
 import ske.aurora.prometheus.ClientMetricsInterceptor;
+import ske.aurora.prometheus.Execute;
 import ske.aurora.prometheus.ServerMetricsFilter;
 
 @Configuration
 public class MetricsConfig {
-
 
     @Bean
     public FilterRegistrationBean serverMetrics() {
@@ -23,6 +23,11 @@ public class MetricsConfig {
         registrationBean.addUrlPatterns("/*");
         registrationBean.setFilter(new ServerMetricsFilter(Collections.emptyList(), CollectorRegistry.defaultRegistry));
         return registrationBean;
+    }
+
+    @Bean
+    public Execute execute() {
+        return new Execute();
     }
 
     @Bean
