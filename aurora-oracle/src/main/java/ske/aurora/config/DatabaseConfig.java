@@ -40,17 +40,12 @@ public class DatabaseConfig {
     @Profile("openshift")
     public DataSource dataSource() throws IOException {
 
-        String envName = auroraProperties.db + "_DB_PROPERTIES";
-        String databasePath = System.getenv(envName.toUpperCase());
-
-        if (databasePath == null) {
+        Properties props = getProperties();
+        if (props == null) {
             return null;
         }
 
-        Properties props = new Properties();
-        try (FileInputStream input = new FileInputStream(databasePath)) {
-            props.load(input);
-        }
+        LOG.debug("Found database property with url" + props.getProperty("jdbc.url"));
 
         return DataSourceBuilder.create()
             .url(props.getProperty("jdbc.url"))
@@ -79,6 +74,7 @@ public class DatabaseConfig {
         String databasePath = System.getenv(envName.toUpperCase());
 
         if (databasePath == null) {
+            LOG.debug("Could not find an database env with the name {}", envName.toUpperCase());
             return null;
         }
 
