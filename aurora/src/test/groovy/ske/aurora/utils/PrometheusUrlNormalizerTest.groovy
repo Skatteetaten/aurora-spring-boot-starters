@@ -15,11 +15,11 @@ class PrometheusUrlNormalizerTest extends Specification {
 
     where:
       url                                                                          | client | normalized
-      "/api/foo"                                                                   | true   | "api_foo"
-      "http://www.vg.no"                                                           | false  | "www.vg.no"
-      "https://www.vg.no:8443"                                                     | false  | "www.vg.no_8443"
-      "http://www.vg.no/index.html?foo=bar"                                        | false  | "www.vg.no_index.html"
-      "https://int-ref.skead.no:14110/felles/sikkerhet/stsSikkerhet/v2/utstedSaml" | false  |
+      "/api/foo"                                                                   | false   | "api_foo"
+      "http://www.vg.no"                                                           | true  | "www.vg.no"
+      "https://www.vg.no:8443"                                                     | true  | "www.vg.no_8443"
+      "http://www.vg.no/index.html?foo=bar"                                        | true  | "www.vg.no_index.html"
+      "https://int-ref.skead.no:14110/felles/sikkerhet/stsSikkerhet/v2/utstedSaml" | true  |
           "int_ref.skead.no_14110_felles_sikkerhet_stsSikkerhet_v2_utstedSaml"
   }
 }
