@@ -23,7 +23,7 @@ public final class Execute extends Collector {
             .name("execute")
             .help("Manual executions that we want statistics on")
             .labelNames("type", "group", "name")
-            .register();
+            .create();
         logger.debug("executions histogram registered");
 
     }
