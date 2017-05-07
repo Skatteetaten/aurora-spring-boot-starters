@@ -9,8 +9,14 @@ public final class PrometheusUrlNormalizer {
 
     }
 
-    public static String normalize(String stringUrl) {
+    public static String normalize(String stringUrl, boolean isClient) {
 
+        //we have a client url for the Servletfilter, just strip leading / and replace. Query parameters is not sent in
+        if (isClient) {
+            return stringUrl.substring(1).replaceAll(":|-|/", "_");
+        }
+
+        //this is a normalized url for the interceptor
         URL url;
         try {
             url = new URL(stringUrl);

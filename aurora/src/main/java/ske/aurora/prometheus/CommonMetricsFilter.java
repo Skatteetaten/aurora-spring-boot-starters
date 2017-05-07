@@ -14,12 +14,14 @@ import io.prometheus.client.SimpleTimer;
 
 public class CommonMetricsFilter extends Collector {
 
+    private boolean isClient;
     private final List<PathGroup> aggregations;
     private final Histogram requests;
     private boolean strictMode;
 
     public CommonMetricsFilter(boolean isClient, List<PathGroup> aggregations,
         boolean strictMode) {
+        this.isClient = isClient;
         this.aggregations = Collections.unmodifiableList(aggregations);
         this.strictMode = strictMode;
 
@@ -43,7 +45,7 @@ public class CommonMetricsFilter extends Collector {
 
         String path = pathGroup
             .map(e -> e.name)
-            .orElse(normalize(requestUri));
+            .orElse(normalize(requestUri, isClient));
 
         requests.labels(
             method,
