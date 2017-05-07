@@ -1,8 +1,9 @@
 package ske.aurora.prometheus;
 
+import static ske.aurora.utils.PrometheusUrlNormalizer.normalize;
+
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 
@@ -15,6 +16,8 @@ public class CommonMetricsFilter {
     private final List<PathGroup> aggregations;
     private final Histogram requests;
 
+
+    //TODO: prefer delegation to inheritance.
     public CommonMetricsFilter(boolean isClient, List<PathGroup> aggregations, CollectorRegistry registry) {
         this.aggregations = Collections.unmodifiableList(aggregations);
         requests = Histogram.build()
@@ -33,30 +36,13 @@ public class CommonMetricsFilter {
     }
 
     private String path(String url) {
-        Optional<String> name = aggregations.stream()
+
+        //TODO: handle strict mode. If we want it.
+       return aggregations.stream()
             .filter(e -> url.matches(e.regex))
             .findFirst()
-            .map(e -> e.name);
-
-        String key;
-
-        if (name.isPresent()) {
-            key = name.get();
-        } else {
-            key = url;
-            key = key.replace("https://", "");
-            key = key.replace("http://", "");
-            if (key.startsWith("/")) {
-                key = key.substring(1);
-            }
-            if (key.endsWith("/")) {
-                key = key.substring(0, key.length() - 1);
-            }
-            key = key.replaceAll(":", "_");
-            key = key.replaceAll("/", "_");
-            key = key.replaceAll("-", "_");
-        }
-        return key;
+            .map(e -> e.name)
+            .orElse(normalize(url));
     }
 
     public static class PathGroup {

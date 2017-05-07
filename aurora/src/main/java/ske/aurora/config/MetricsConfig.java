@@ -21,6 +21,7 @@ public class MetricsConfig {
     public FilterRegistrationBean serverMetrics() {
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.addUrlPatterns("/*");
+        //TODO: Read config from yaml fil here.
         registrationBean.setFilter(new ServerMetricsFilter(Collections.emptyList(), CollectorRegistry.defaultRegistry));
         return registrationBean;
     }
@@ -31,11 +32,17 @@ public class MetricsConfig {
     }
 
     @Bean
-    public RestTemplate restTemplate(ClientMetricsInterceptor interceptor) {
+    public OkHttpClient client(ClientMetricsInterceptor interceptor) {
 
-        OkHttpClient client = new OkHttpClient.Builder()
+        //TODO: read config from yaml file here.
+       return new OkHttpClient.Builder()
             .addInterceptor(interceptor)
             .build();
+
+    }
+
+    @Bean
+    public RestTemplate restTemplate(OkHttpClient client) {
 
         OkHttp3ClientHttpRequestFactory okHttp3ClientHttpRequestFactory = new OkHttp3ClientHttpRequestFactory(client);
         return new RestTemplate(okHttp3ClientHttpRequestFactory);

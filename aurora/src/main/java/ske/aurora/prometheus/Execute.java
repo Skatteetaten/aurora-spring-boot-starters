@@ -36,6 +36,7 @@ public final class Execute {
         return withMetrics(claz.getName(), name, s);
     }
 
+    //TODO: Bør vi her lage en withMetrics som leser fra Stack traces for å lage group/name?
 
     public static <T> T withMetrics(String group, String name,
         Supplier<T> s) {
@@ -46,6 +47,7 @@ public final class Execute {
             T result = s.get();
             return result;
         } catch (Exception e) {
+            //TODO: add exception type as a label here?
             type = "failure";
             throw e;
         } finally {
