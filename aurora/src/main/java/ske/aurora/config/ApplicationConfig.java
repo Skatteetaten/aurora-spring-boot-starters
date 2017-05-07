@@ -9,7 +9,6 @@ import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,14 +27,13 @@ public class ApplicationConfig {
     private static final Logger logger = LoggerFactory.getLogger(ApplicationConfig.class);
     private ConfigurableEnvironment env;
 
-    public ApplicationConfig(ConfigurableEnvironment env){
+    public ApplicationConfig(ConfigurableEnvironment env) {
 
         this.env = env;
     }
 
     /**
      * Register the {@link AuroraHeaderFilter} to apply to /api/*
-     *
      */
     @Bean
     public FilterRegistrationBean auroraHeaderFilter() {
@@ -49,7 +47,6 @@ public class ApplicationConfig {
      * Creates a PropertySource for configuration in the Aurora Secret properties file. This properties file is mounted
      * in the container by OpenShift when the application is deployed. In most instances, AOC is used to manage the
      * configuration that ultimately ends up in this file.
-     *
      */
     @Bean
     public PropertiesPropertySource secretProperties() {
@@ -60,7 +57,6 @@ public class ApplicationConfig {
      * Creates a PropertySource for configuration in the Aurora Env properties file. This properties file is mounted
      * in the container by OpenShift when the application is deployed. In most instances, AOC is used to manage the
      * configuration that ultimately ends up in this file.
-     *
      */
     @Bean
     public PropertiesPropertySource configProperties() {
@@ -70,7 +66,6 @@ public class ApplicationConfig {
     /**
      * Creates a PropertySource for some of the environment variables that exposed via the OpenShift deployment
      * configuration. The values of these environment variables are controlled by AOC.
-     *
      */
     @Bean
     public PropertiesPropertySource auroraProperties() {

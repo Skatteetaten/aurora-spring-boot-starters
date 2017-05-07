@@ -3,7 +3,7 @@ package ske.aurora.utils;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class PrometheusUrlNormalizer {
+public final class PrometheusUrlNormalizer {
 
     private PrometheusUrlNormalizer() {
 

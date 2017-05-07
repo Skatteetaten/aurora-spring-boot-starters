@@ -12,7 +12,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import io.prometheus.client.CollectorRegistry;
 import io.prometheus.client.SimpleTimer;
 
 public class ServerMetricsFilter extends CommonMetricsFilter implements Filter {

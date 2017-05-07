@@ -1,3 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   ske.aurora.config.ApplicationConfig,\
-  ske.aurora.config.MetricsConfig
+  ske.aurora.config.MetricsConfig,\
+  ske.aurora.config.FilterConfig
