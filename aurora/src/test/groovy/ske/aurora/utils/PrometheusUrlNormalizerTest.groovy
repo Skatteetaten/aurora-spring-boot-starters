@@ -22,8 +22,4 @@ class PrometheusUrlNormalizerTest extends Specification {
       //denne filer med "vanlig normalize"
       //   "http://www.vg.no/index.html?foo=bar" | "www.vg.no_index.html"
   }
-
-  def "Should find status code group"() {
-
-  }
-  }
+}

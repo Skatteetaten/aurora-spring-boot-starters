@@ -1,5 +1,6 @@
 package ske.aurora.prometheus;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 import javax.annotation.PostConstruct;
@@ -8,11 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import io.prometheus.client.Collector;
 import io.prometheus.client.Histogram;
 import io.prometheus.client.SimpleTimer;
 
-@Service
-public final class Execute {
+public final class Execute extends Collector{
 
     private static final Logger logger = LoggerFactory.getLogger(Execute.class);
 
@@ -24,11 +25,16 @@ public final class Execute {
     public Execute() {
         executions = Histogram.build()
             .name("execute")
-            .help("Manual executions that we want statics off")
+            .help("Manual executions that we want statistics on")
             .labelNames("type", "group", "name")
             .register();
         logger.debug("executions histogram registered");
 
+    }
+
+    @Override
+    public List<MetricFamilySamples> collect() {
+        return executions.collect();
     }
 
     public static <T> T withMetrics(Class claz, String name,
@@ -36,28 +42,30 @@ public final class Execute {
         return withMetrics(claz.getName(), name, s);
     }
 
-    //TODO: Bør vi her lage en withMetrics som leser fra Stack traces for å lage group/name?
-
     public static <T> T withMetrics(String group, String name,
         Supplier<T> s) {
 
         SimpleTimer requestTimer = new SimpleTimer();
         String type = "success";
         try {
-            T result = s.get();
-            return result;
+            return  s.get();
         } catch (Exception e) {
-            //TODO: add exception type as a label here?
-            type = "failure";
+            type = e.getClass().getSimpleName();
             throw e;
         } finally {
             instance.executions.labels(type, group, name)
                 .observe(requestTimer.elapsedSeconds());
         }
     }
-    @PostConstruct
-    public void registerInstance() {
-        logger.debug("Register execute instance");
-        instance = this;
+
+    public static Execute getInstance() {
+
+        if(instance == null) {
+
+            logger.debug("Create new execute metrics");
+            instance = new Execute();
+        }
+        return instance;
     }
+
 }

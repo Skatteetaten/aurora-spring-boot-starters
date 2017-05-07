@@ -25,15 +25,17 @@ import ske.aurora.filter.logging.AuroraHeaderFilter;
 @Configuration
 public class ApplicationConfig {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ApplicationConfig.class);
-
-    @Autowired
+    private static final Logger logger = LoggerFactory.getLogger(ApplicationConfig.class);
     private ConfigurableEnvironment env;
+
+    public ApplicationConfig(ConfigurableEnvironment env){
+
+        this.env = env;
+    }
 
     /**
      * Register the {@link AuroraHeaderFilter} to apply to /api/*
      *
-     * @return
      */
     @Bean
     public FilterRegistrationBean auroraHeaderFilter() {
@@ -48,7 +50,6 @@ public class ApplicationConfig {
      * in the container by OpenShift when the application is deployed. In most instances, AOC is used to manage the
      * configuration that ultimately ends up in this file.
      *
-     * @return
      */
     @Bean
     public PropertiesPropertySource secretProperties() {
@@ -60,7 +61,6 @@ public class ApplicationConfig {
      * in the container by OpenShift when the application is deployed. In most instances, AOC is used to manage the
      * configuration that ultimately ends up in this file.
      *
-     * @return
      */
     @Bean
     public PropertiesPropertySource configProperties() {
@@ -71,7 +71,6 @@ public class ApplicationConfig {
      * Creates a PropertySource for some of the environment variables that exposed via the OpenShift deployment
      * configuration. The values of these environment variables are controlled by AOC.
      *
-     * @return
      */
     @Bean
     public PropertiesPropertySource auroraProperties() {
@@ -102,7 +101,7 @@ public class ApplicationConfig {
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(propertiesName))) {
             props.load(reader);
         } catch (IOException e) {
-            LOG.debug("Could not read file location " + propertiesName);
+            logger.debug("Could not read file location " + propertiesName, e);
             return null;
         }
 

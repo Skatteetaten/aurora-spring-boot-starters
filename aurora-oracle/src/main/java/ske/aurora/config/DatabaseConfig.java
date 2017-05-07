@@ -28,13 +28,15 @@ import org.springframework.core.env.PropertiesPropertySource;
 @ConditionalOnProperty(prefix = "aurora", value = "db")
 public class DatabaseConfig {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DatabaseConfig.class);
-
-    @Autowired
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseConfig.class);
     private ConfigurableEnvironment env;
-
-    @Autowired
     private AuroraProperties auroraProperties;
+
+    public DatabaseConfig(ConfigurableEnvironment env, AuroraProperties auroraProperties) {
+
+        this.env = env;
+        this.auroraProperties = auroraProperties;
+    }
 
     @Bean
     @Profile("openshift")
@@ -45,7 +47,7 @@ public class DatabaseConfig {
             return null;
         }
 
-        LOG.debug("Found database property with url:{}, username:{}, password:{}",
+        logger.debug("Found database property with url:{}, username:{}, password:{}",
             props.getProperty("jdbc.url"), props.getProperty("jdbc.user"), props.getProperty("jdbc.password").length());
 
         return DataSourceBuilder.create()
@@ -71,11 +73,11 @@ public class DatabaseConfig {
     }
 
     private Properties getProperties() throws IOException {
-        String envName = auroraProperties.db + "_DB_PROPERTIES";
-        String databasePath = System.getenv(envName.toUpperCase());
+        String envName = String.format("%s_DB_PROPERTIES", auroraProperties.db).toUpperCase();
+        String databasePath = System.getenv(envName);
 
         if (databasePath == null) {
-            LOG.debug("Could not find an database env with the name {}", envName.toUpperCase());
+            logger.debug("The environment variable {} is not set.", envName);
             return null;
         }
 
@@ -95,7 +97,6 @@ public class DatabaseConfig {
         }
 
         public void setDb(String db) {
-            LOG.debug("setting db property on aurora to=" + db);
             this.db = db;
         }
     }
