@@ -4,45 +4,66 @@ import static ske.aurora.utils.PrometheusUrlNormalizer.normalize;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 
 import io.prometheus.client.Collector;
-import io.prometheus.client.CollectorRegistry;
 import io.prometheus.client.Histogram;
+import io.prometheus.client.SimpleTimer;
 
-public class CommonMetricsFilter {
+public class CommonMetricsFilter extends Collector {
 
     private final List<PathGroup> aggregations;
     private final Histogram requests;
+    private boolean strictMode;
 
-
-    //TODO: prefer delegation to inheritance.
-    public CommonMetricsFilter(boolean isClient, List<PathGroup> aggregations, CollectorRegistry registry) {
+    public CommonMetricsFilter(boolean isClient, List<PathGroup> aggregations,
+        boolean strictMode) {
         this.aggregations = Collections.unmodifiableList(aggregations);
+        this.strictMode = strictMode;
+
+        if (strictMode && aggregations.isEmpty()) {
+            throw new IllegalArgumentException("Strict mode with no PathGroups is not allowed.");
+        }
         requests = Histogram.build()
-            .name("http_" + (isClient ? "client" : "server") + "_requests")
-            .help("Http requests")
-            .labelNames("http_method", "http_status", "path")
-            .register(registry);
+            .name(String.format("http_%s_requests", isClient ? "client" : "server"))
+            .help(String.format("Http %s requests", isClient ? "client" : "server"))
+            .labelNames("http_method", "http_status", "http_status_group", "path")
+            .create();
     }
 
-    void record(String method, String requestUri, int statusCode, long startTimeNano) {
-        long duration = System.nanoTime() - startTimeNano;
+    void record(String method, String requestUri, int statusCode, SimpleTimer timer) {
+
+        Optional<PathGroup> pathGroup = findMatchingPathGroup(requestUri);
+
+        if (strictMode && !pathGroup.isPresent()) {
+            return;
+        }
+
+        String path = pathGroup
+            .map(e -> e.name)
+            .orElse(normalize(requestUri));
+
         requests.labels(
             method,
-            ServerLabel.fromStatusCode(statusCode).name(),
-            path(requestUri)).observe(duration / Collector.NANOSECONDS_PER_SECOND);
+            String.valueOf(statusCode),
+            HttpStatus.Series.valueOf(statusCode).name(),
+            path
+        ).observe(timer.elapsedSeconds());
     }
 
-    private String path(String url) {
+    private Optional<PathGroup> findMatchingPathGroup(String url) {
 
-        //TODO: handle strict mode. If we want it.
-       return aggregations.stream()
+        return aggregations.stream()
             .filter(e -> url.matches(e.regex))
-            .findFirst()
-            .map(e -> e.name)
-            .orElse(normalize(url));
+            .findFirst();
+
+    }
+
+    @Override
+    public List<MetricFamilySamples> collect() {
+        return requests.collect();
     }
 
     public static class PathGroup {
@@ -53,36 +74,5 @@ public class CommonMetricsFilter {
             this.regex = regex;
             this.name = name;
         }
-    }
-
-    public enum ServerLabel {
-        SUCCESS,
-        NOT_FOUND,
-        CLIENT_ERROR,
-        SERVER_ERROR,
-        OTHER,
-        EXCEPTION;
-
-        public static ServerLabel fromStatusCode(int statusCode) {
-            if (statusCode == 0) {
-                return EXCEPTION;
-            }
-            HttpStatus.Series series = HttpStatus.Series.valueOf(statusCode);
-            HttpStatus httpStatus = HttpStatus.valueOf(statusCode);
-
-            if (series == HttpStatus.Series.SUCCESSFUL) {
-                return SUCCESS;
-            } else if (httpStatus == HttpStatus.NOT_FOUND) {
-                return NOT_FOUND;
-            } else if (series == HttpStatus.Series.CLIENT_ERROR) {
-                return CLIENT_ERROR;
-            } else if (series == HttpStatus.Series.SERVER_ERROR) {
-                return SERVER_ERROR;
-            } else {
-                return OTHER;
-            }
-
-        }
-
     }
 }

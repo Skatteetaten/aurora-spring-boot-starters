@@ -15,11 +15,11 @@ class PrometheusUrlNormalizerTest extends Specification {
       normalize(url) == normalize(url)
 
     where:
-      url                      | normalized
-      "http://www.vg.no"       | "www.vg.no"
-      "http:///www.vg.no"      | "www.vg.no"
-      "https://www.vg.no:8443" | "www.vg.no_8443"
+      url                                   | normalized
+      "http://www.vg.no"                    | "www.vg.no"
+      "https://www.vg.no:8443"              | "www.vg.no_8443"
       //denne filer med "vanlig normalize"
-      //   "http://www.vg.no/index.html?foo=bar" | "www.vg.no_index.html"
+      "http://www.vg.no/index.html?foo=bar" | "www.vg.no_index.html"
+      "https://int-ref.skead.no:14110/felles/sikkerhet/stsSikkerhet/v2/utstedSaml" | "int_ref.skead.no_14110_felles_sikkerhet_stsSikkerhet_v2_utstedSaml"
   }
 }

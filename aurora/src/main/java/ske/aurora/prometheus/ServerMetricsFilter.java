@@ -13,15 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import io.prometheus.client.CollectorRegistry;
+import io.prometheus.client.SimpleTimer;
 
 public class ServerMetricsFilter extends CommonMetricsFilter implements Filter {
 
-    public ServerMetricsFilter(List<PathGroup> aggregations, CollectorRegistry registry) {
-        super(false, aggregations, registry);
-    }
-
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public ServerMetricsFilter(List<PathGroup> aggregations, boolean strictMode) {
+        super(false, aggregations, strictMode);
     }
 
     @Override
@@ -31,17 +28,22 @@ public class ServerMetricsFilter extends CommonMetricsFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        long start = System.nanoTime();
+        SimpleTimer requestTimer = new SimpleTimer();
+
         try {
             filterChain.doFilter(request, response);
         } finally {
-            record(request.getMethod(), request.getRequestURI(), response.getStatus(), start);
+            record(request.getMethod(), request.getRequestURI(), response.getStatus(), requestTimer);
         }
     }
 
     @Override
     public void destroy() {
 
+    }
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
     }
 
 }

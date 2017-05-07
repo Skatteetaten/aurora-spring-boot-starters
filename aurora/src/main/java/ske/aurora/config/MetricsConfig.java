@@ -28,20 +28,24 @@ public class MetricsConfig {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(MetricsConfig.class);
 
     @Bean
-    public FilterRegistrationBean serverMetrics(CollectorRegistry registry) {
-        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-        registrationBean.addUrlPatterns("/*");
+    public ServerMetricsFilter serverMetricsFilter() {
         //TODO: Read config from yaml fil here.
-        registrationBean.setFilter(new ServerMetricsFilter(Collections.emptyList(), registry));
-        return registrationBean;
+        return new ServerMetricsFilter(Collections.emptyList(), false);
     }
 
+    @Bean
+    public FilterRegistrationBean serverMetrics(ServerMetricsFilter filter) {
+        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+        registrationBean.addUrlPatterns("/*");
+        registrationBean.setFilter(filter);
+        return registrationBean;
+    }
 
     @Bean
     public OkHttpClient client(ClientMetricsInterceptor interceptor) {
 
         //TODO: read config from yaml file here.
-       return new OkHttpClient.Builder()
+        return new OkHttpClient.Builder()
             .addInterceptor(interceptor)
             .build();
 
@@ -55,14 +59,17 @@ public class MetricsConfig {
     }
 
     @Bean
-    public ClientMetricsInterceptor clientMetrics(CollectorRegistry registry) {
-        return new ClientMetricsInterceptor(Collections.emptyList(), registry);
+    public ClientMetricsInterceptor clientMetrics() {
+        return new ClientMetricsInterceptor(Collections.emptyList(), false);
     }
 
     @Bean
-    public CollectorRegistry prometheusRegistry(){
+    public CollectorRegistry prometheusRegistry(ServerMetricsFilter serverMetricsFilter,
+        ClientMetricsInterceptor clientMetricsInterceptor) {
         CollectorRegistry registry = CollectorRegistry.defaultRegistry;
 
+        serverMetricsFilter.register(registry);
+        clientMetricsInterceptor.register(registry);
 
         //do not register the default metrics since we want full control here? Is
         new StandardExports().register(registry);

@@ -5,12 +5,11 @@ import java.net.URL;
 
 public class PrometheusUrlNormalizer {
 
-
     private PrometheusUrlNormalizer() {
 
     }
 
-    public static String normalize(String stringUrl)  {
+    public static String normalize(String stringUrl) {
 
         URL url;
         try {
@@ -27,8 +26,6 @@ public class PrometheusUrlNormalizer {
         String pathSegment = url.getPath();
         if ("/".equalsIgnoreCase(pathSegment)) {
             pathSegment = "";
-        } else if(pathSegment.startsWith("/")) {
-            pathSegment = pathSegment.substring(1);
         }
 
         String finalUrl = String.format("%s%s%s", url.getHost(), portSegment, pathSegment);
