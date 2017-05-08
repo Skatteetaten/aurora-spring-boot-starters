@@ -9,11 +9,13 @@ import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertiesPropertySource;
+import org.springframework.web.client.RestTemplate;
 
 import ske.aurora.filter.logging.AuroraHeaderFilter;
 
@@ -104,6 +106,12 @@ public class ApplicationConfig {
         env.getPropertySources().addLast(secretProps);
 
         return secretProps;
+    }
+
+    @ConditionalOnMissingBean(RestTemplate.class)
+    @Bean
+    RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 
 }

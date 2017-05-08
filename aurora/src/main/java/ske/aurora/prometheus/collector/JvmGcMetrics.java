@@ -1,4 +1,4 @@
-package ske.aurora.prometheus;
+package ske.aurora.prometheus.collector;
 
 import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;

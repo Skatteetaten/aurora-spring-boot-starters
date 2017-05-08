@@ -1,4 +1,4 @@
-package ske.aurora.prometheus;
+package ske.aurora.prometheus.collector;
 
 import static ske.aurora.utils.PrometheusUrlNormalizer.normalize;
 
@@ -10,16 +10,15 @@ import org.springframework.http.HttpStatus;
 
 import io.prometheus.client.Collector;
 import io.prometheus.client.Histogram;
-import io.prometheus.client.SimpleTimer;
 
-public class CommonMetricsFilter extends Collector {
+public class HttpMetricsCollector extends Collector {
 
     private boolean isClient;
     private final List<PathGroup> aggregations;
     private final Histogram requests;
     private boolean strictMode;
 
-    public CommonMetricsFilter(boolean isClient, List<PathGroup> aggregations,
+    public HttpMetricsCollector(boolean isClient, List<PathGroup> aggregations,
         boolean strictMode) {
         this.isClient = isClient;
         this.aggregations = Collections.unmodifiableList(aggregations);
@@ -35,7 +34,7 @@ public class CommonMetricsFilter extends Collector {
             .create();
     }
 
-    void record(String method, String requestUri, int statusCode, SimpleTimer timer) {
+    public void record(String method, String requestUri, int statusCode, long start) {
 
         Optional<PathGroup> pathGroup = findMatchingPathGroup(requestUri);
 
@@ -47,12 +46,13 @@ public class CommonMetricsFilter extends Collector {
             .map(e -> e.name)
             .orElse(normalize(requestUri, isClient));
 
+        long duration = System.nanoTime() - start;
         requests.labels(
             method,
             String.valueOf(statusCode),
             HttpStatus.Series.valueOf(statusCode).name(),
             path
-        ).observe(timer.elapsedSeconds());
+        ).observe(duration / Collector.NANOSECONDS_PER_SECOND);
     }
 
     private Optional<PathGroup> findMatchingPathGroup(String url) {

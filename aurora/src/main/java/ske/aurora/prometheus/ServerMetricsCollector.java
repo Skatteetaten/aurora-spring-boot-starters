@@ -1,7 +1,6 @@
 package ske.aurora.prometheus;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -12,12 +11,19 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import io.prometheus.client.SimpleTimer;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
-public class ServerMetricsFilter extends CommonMetricsFilter implements Filter {
+import ske.aurora.prometheus.collector.HttpMetricsCollector;
 
-    public ServerMetricsFilter(List<PathGroup> aggregations, boolean strictMode) {
-        super(false, aggregations, strictMode);
+@Component
+public class ServerMetricsCollector  implements Filter {
+
+    private HttpMetricsCollector collector;
+
+    public ServerMetricsCollector(@Qualifier("server") HttpMetricsCollector collector) {
+
+        this.collector = collector;
     }
 
     @Override
@@ -27,12 +33,11 @@ public class ServerMetricsFilter extends CommonMetricsFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        SimpleTimer requestTimer = new SimpleTimer();
-
+        long start = System.nanoTime();
         try {
             filterChain.doFilter(request, response);
         } finally {
-            record(request.getMethod(), request.getRequestURI(), response.getStatus(), requestTimer);
+            collector.record(request.getMethod(), request.getRequestURI(), response.getStatus(), start);
         }
     }
 

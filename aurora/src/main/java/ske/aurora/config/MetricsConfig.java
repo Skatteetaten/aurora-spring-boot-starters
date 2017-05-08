@@ -1,5 +1,7 @@
 package ske.aurora.config;
 
+import java.util.Set;
+
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,11 +12,10 @@ import io.prometheus.client.CollectorRegistry;
 import io.prometheus.client.hotspot.MemoryPoolsExports;
 import io.prometheus.client.hotspot.StandardExports;
 import io.prometheus.client.hotspot.ThreadExports;
-import ske.aurora.prometheus.ClientMetricsInterceptor;
-import ske.aurora.prometheus.Execute;
-import ske.aurora.prometheus.JvmGcMetrics;
-import ske.aurora.prometheus.LogbackMetricsAppender;
-import ske.aurora.prometheus.ServerMetricsFilter;
+import io.prometheus.client.logback.InstrumentedAppender;
+import ske.aurora.prometheus.collector.Execute;
+import ske.aurora.prometheus.collector.HttpMetricsCollector;
+import ske.aurora.prometheus.collector.JvmGcMetrics;
 
 @Configuration
 public class MetricsConfig {
@@ -22,12 +23,10 @@ public class MetricsConfig {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(MetricsConfig.class);
 
     @Bean
-    public CollectorRegistry prometheusRegistry(ServerMetricsFilter serverMetricsFilter,
-        ClientMetricsInterceptor clientMetricsInterceptor) {
+    public CollectorRegistry prometheusRegistry(Set<HttpMetricsCollector> httpCollectors) {
         CollectorRegistry registry = CollectorRegistry.defaultRegistry;
 
-        serverMetricsFilter.register(registry);
-        clientMetricsInterceptor.register(registry);
+        httpCollectors.forEach(it -> it.register(registry));
 
         //do not register the default metrics since we want full control here? Is
         new StandardExports().register(registry);
@@ -45,13 +44,14 @@ public class MetricsConfig {
 
         // logback metrics
         LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
-        LogbackMetricsAppender logbackMetricsAppender = new LogbackMetricsAppender(registry);
-        logbackMetricsAppender.setContext(lc);
-        logbackMetricsAppender.start();
+        InstrumentedAppender appender = new InstrumentedAppender();
+        appender.setContext(lc);
+        appender.start();
         Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-        root.addAppender(logbackMetricsAppender);
+        root.addAppender(appender);
 
         logger.debug("Registered gc metrics, execute metrics and logback metrics");
         return registry;
     }
+
 }
