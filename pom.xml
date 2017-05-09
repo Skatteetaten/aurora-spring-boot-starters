@@ -3,7 +3,7 @@
 
   <groupId>ske.aurora.springboot</groupId>
   <artifactId>aurora-spring-boot-starter-parent</artifactId>
-  <version>0.0.6</version>
+  <version>0.0.7</version>
   <packaging>pom</packaging>
 
 
@@ -85,11 +85,6 @@
           <artifactId>maven-checkstyle-plugin</artifactId>
           <version>2.17</version>
         </plugin>
-        <plugin>
-          <groupId>org.jacoco</groupId>
-          <artifactId>jacoco-maven-plugin</artifactId>
-          <version>0.7.9</version>
-        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
@@ -136,22 +131,6 @@
       <plugin>
         <groupId>pl.project13.maven</groupId>
         <artifactId>git-commit-id-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-        <configuration>
-          <destFile>${sonar.jacoco.reportPath}</destFile>
-          <append>true</append>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>prepare-agent</goal>
-              <goal>report</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

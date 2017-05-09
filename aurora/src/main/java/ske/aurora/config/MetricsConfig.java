@@ -26,7 +26,7 @@ public class MetricsConfig {
     public CollectorRegistry prometheusRegistry(Set<HttpMetricsCollector> httpCollectors) {
         CollectorRegistry registry = CollectorRegistry.defaultRegistry;
 
-        httpCollectors.forEach( it -> it.register(registry));
+        httpCollectors.forEach(it -> it.register(registry));
 
         //do not register the default metrics since we want full control here? Is
         new StandardExports().register(registry);
@@ -53,7 +53,5 @@ public class MetricsConfig {
         logger.debug("Registered standard, memory, thread, gc, httpcollectors and logback metrics");
         return registry;
     }
-
-
 
 }
