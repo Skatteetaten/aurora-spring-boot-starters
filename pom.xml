@@ -55,7 +55,7 @@
     <pluginManagement>
       <plugins>
         <plugin>
-          <!-- Brukes til å kompilere groovy kode i enhetstestene -->
+          <!-- Used to compile groovy code in tests  -->
           <groupId>org.codehaus.gmavenplus</groupId>
           <artifactId>gmavenplus-plugin</artifactId>
           <version>1.5</version>

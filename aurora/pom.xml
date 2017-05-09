@@ -41,7 +41,6 @@
       <artifactId>simpleclient</artifactId>
       <version>0.0.21</version>
     </dependency>
-    <!-- Hotspot JVM metrics-->
     <dependency>
       <groupId>io.prometheus</groupId>
       <artifactId>simpleclient_hotspot</artifactId>
@@ -65,22 +64,20 @@
       <version>1.0-groovy-2.4</version>
       <scope>test</scope>
     </dependency>
-    <!-- Valgfrie avhengigheter ved bruk av spock -->
-    <dependency> <!-- bruk en bestemt versjon av groovy (istedenfor den som settes av spock-core -->
+    <dependency>
       <groupId>org.codehaus.groovy</groupId>
       <artifactId>groovy-all</artifactId>
       <version>2.4.1</version>
       <scope>test</scope>
 
     </dependency>
-    <dependency> <!-- for å kunne mocke klasser (ikke bare interface) -->
+    <dependency>
       <groupId>cglib</groupId>
       <artifactId>cglib-nodep</artifactId>
       <version>3.1</version>
       <scope>test</scope>
-
     </dependency>
-    <dependency> <!-- for å kunne mocke klasser uten default konstruktør -->
+    <dependency>
       <groupId>org.objenesis</groupId>
       <artifactId>objenesis</artifactId>
       <version>2.1</version>
