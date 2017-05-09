@@ -30,7 +30,7 @@ public class FilterConfig {
     @PostConstruct
     public void init() {
         if (restTemplates == null) {
-            throw new IllegalArgumentException(("no resttemplates?"));
+            throw new IllegalArgumentException("no resttemplates?");
         }
 
         restTemplates.forEach(this::registerInterceptors);
