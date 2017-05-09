@@ -27,6 +27,7 @@ public class HttpMetricsCollectorConfig {
         return new HttpMetricsCollector(false, Collections.emptyList(), false);
     }
 
+    //TODO: Add posibility to exclude some regexes
     @ConfigurationProperties(prefix = "aurora.client")
     public static class AuroraClientConfiguration {
 
