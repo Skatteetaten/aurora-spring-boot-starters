@@ -22,7 +22,6 @@ public class ServerMetricsCollector  implements Filter {
     private HttpMetricsCollector collector;
 
     public ServerMetricsCollector(@Qualifier("server") HttpMetricsCollector collector) {
-
         this.collector = collector;
     }
 

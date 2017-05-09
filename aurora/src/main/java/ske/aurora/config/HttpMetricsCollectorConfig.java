@@ -27,16 +27,12 @@ public class HttpMetricsCollectorConfig {
         return new HttpMetricsCollector(false, Collections.emptyList(), false);
     }
 
-    //TODO: Add posibility to exclude some regexes
     @ConfigurationProperties(prefix = "aurora.client")
     public static class AuroraClientConfiguration {
 
         private boolean strict = false;
-        private Map<String, String> metrics = new HashMap<>();
+        private Map<String, String> metricsPathLabelGroupings = new HashMap<>();
 
-        public Map<String, String> getMetrics() {
-            return this.metrics;
-        }
 
         public boolean isStrict() {
             return strict;
@@ -47,10 +43,14 @@ public class HttpMetricsCollectorConfig {
         }
 
         List<HttpMetricsCollector.PathGroup> asPathGroup() {
-            return metrics.entrySet().stream()
+            return metricsPathLabelGroupings.entrySet().stream()
                 .map(e -> new HttpMetricsCollector.PathGroup(e.getValue(), e.getKey()))
                 .collect(Collectors.toList());
 
+        }
+
+        public Map<String, String> getMetricsPathLabelGroupings() {
+            return metricsPathLabelGroupings;
         }
     }
 

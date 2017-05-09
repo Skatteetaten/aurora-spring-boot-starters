@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>aurora-oracle-spring-boot-starter</artifactId>
-  <version>0.0.5</version>
+  <version>0.0.6</version>
   <packaging>jar</packaging>
 
   <name>aurora-oracle-spring-boot-starter</name>
@@ -11,7 +11,7 @@
   <parent>
     <groupId>ske.aurora.springboot</groupId>
     <artifactId>aurora-spring-boot-starter-parent</artifactId>
-    <version>0.0.5</version>
+    <version>0.0.6</version>
   </parent>
 
   <dependencies>
