@@ -28,17 +28,11 @@ public class MetricsConfig {
 
         httpCollectors.forEach(it -> it.register(registry));
 
-        //do not register the default metrics since we want full control here? Is
+        //do not register the default metrics since we want full control here.
         new StandardExports().register(registry);
         new MemoryPoolsExports().register(registry);
         new ThreadExports().register(registry);
 
-        //We do not need these. No need to make metrics we will never scrape
-        //new ClassLoadingExports().register(registry);
-        //new VersionInfoExports().register(registry);
-
-        //do we need both of these?
-        //new GarbageCollectorExports().register(registry);
         new JvmGcMetrics().register(registry);
         Execute.getInstance().register(registry);
 
