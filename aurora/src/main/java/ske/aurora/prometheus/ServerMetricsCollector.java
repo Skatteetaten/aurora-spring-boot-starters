@@ -42,11 +42,13 @@ public class ServerMetricsCollector  implements Filter {
 
     @Override
     public void destroy() {
-
+        //we do not need to destroy
     }
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+        //nothing to init
+
     }
 
 }
