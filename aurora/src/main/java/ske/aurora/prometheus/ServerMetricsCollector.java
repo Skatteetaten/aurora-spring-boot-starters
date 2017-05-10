@@ -1,7 +1,6 @@
 package ske.aurora.prometheus;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -12,16 +11,18 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import io.prometheus.client.CollectorRegistry;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
-public class ServerMetricsFilter extends CommonMetricsFilter implements Filter {
+import ske.aurora.prometheus.collector.HttpMetricsCollector;
 
-    public ServerMetricsFilter(List<PathGroup> aggregations, CollectorRegistry registry) {
-        super(false, aggregations, registry);
-    }
+@Component
+public class ServerMetricsCollector  implements Filter {
 
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    private HttpMetricsCollector collector;
+
+    public ServerMetricsCollector(@Qualifier("server") HttpMetricsCollector collector) {
+        this.collector = collector;
     }
 
     @Override
@@ -35,12 +36,18 @@ public class ServerMetricsFilter extends CommonMetricsFilter implements Filter {
         try {
             filterChain.doFilter(request, response);
         } finally {
-            record(request.getMethod(), request.getRequestURI(), response.getStatus(), start);
+            collector.record(request.getMethod(), request.getRequestURI(), response.getStatus(), start);
         }
     }
 
     @Override
     public void destroy() {
+        //we do not need to destroy
+    }
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        //nothing to init
 
     }
 

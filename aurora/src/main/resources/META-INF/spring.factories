@@ -1,4 +1,7 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   ske.aurora.config.ApplicationConfig,\
-  ske.aurora.config.MetricsConfig,\
-  ske.aurora.prometheus.PrometheusConfiguration
+  ske.aurora.config.FilterConfig,\
+  ske.aurora.config.HttpMetricsCollectorAutoConfig,\
+  ske.aurora.config.MetricsAutoConfig,\
+  ske.aurora.prometheus.ServerMetricsCollector,\
+  ske.aurora.prometheus.TimingInterceptor

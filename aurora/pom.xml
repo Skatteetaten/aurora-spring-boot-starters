@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>aurora-spring-boot-starter</artifactId>
-  <version>0.1</version>
+  <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>aurora-spring-boot-starter</name>
@@ -11,10 +11,15 @@
   <parent>
     <groupId>ske.aurora.springboot</groupId>
     <artifactId>aurora-spring-boot-starter-parent</artifactId>
-    <version>0.1</version>
+    <version>1.0-SNAPSHOT</version>
   </parent>
 
   <dependencies>
+    <dependency>
+      <groupId>ske.aurora</groupId>
+      <artifactId>aurora-prometheus</artifactId>
+      <version>1.0.5</version>
+    </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
@@ -41,10 +46,14 @@
       <artifactId>simpleclient</artifactId>
       <version>0.0.21</version>
     </dependency>
-    <!-- Hotspot JVM metrics-->
     <dependency>
       <groupId>io.prometheus</groupId>
       <artifactId>simpleclient_hotspot</artifactId>
+      <version>0.0.21</version>
+    </dependency>
+    <dependency>
+      <groupId>io.prometheus</groupId>
+      <artifactId>simpleclient_logback</artifactId>
       <version>0.0.21</version>
     </dependency>
     <!-- Exposition servlet-->
@@ -52,11 +61,6 @@
       <groupId>io.prometheus</groupId>
       <artifactId>simpleclient_spring_boot</artifactId>
       <version>0.0.21</version>
-    </dependency>
-    <dependency>
-      <groupId>com.squareup.okhttp3</groupId>
-      <artifactId>okhttp</artifactId>
-      <version>3.7.0</version>
     </dependency>
   </dependencies>
 </project>
