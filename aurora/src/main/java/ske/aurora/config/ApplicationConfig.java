@@ -74,7 +74,7 @@ public class ApplicationConfig {
 
         Properties props = new Properties();
         Stream.of("AURORA_VERSION", "APP_VERSION").forEach(p -> {
-            String value = System.getenv(p);
+            String value = (String) env.getSystemEnvironment().get(p);
             if (value != null) {
                 props.put(p, value);
             }
@@ -87,7 +87,7 @@ public class ApplicationConfig {
 
     private PropertiesPropertySource createAuroraPropertySource(String name, String envPrefix) {
 
-        String secretPrefix = System.getenv(envPrefix);
+        String secretPrefix = (String) env.getSystemEnvironment().get(envPrefix);
         if (secretPrefix == null) {
             return null;
         }

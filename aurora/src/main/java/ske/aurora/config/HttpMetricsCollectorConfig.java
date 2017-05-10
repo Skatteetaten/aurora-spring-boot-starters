@@ -1,16 +1,14 @@
 package ske.aurora.config;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import ske.aurora.prometheus.HttpMetricsCollectorSpecification;
 import ske.aurora.prometheus.collector.HttpMetricsCollector;
 
 @Configuration
@@ -19,38 +17,61 @@ public class HttpMetricsCollectorConfig {
 
     @Bean(name = "client")
     public HttpMetricsCollector clientHttpMetricsCollector(AuroraClientConfiguration configuration) {
-        return new HttpMetricsCollector(true, configuration.asPathGroup(), configuration.isStrict());
+        return new HttpMetricsCollector(true, configuration);
     }
 
     @Bean(name = "server")
-    public HttpMetricsCollector serverHttpMetricsCollector() {
-        return new HttpMetricsCollector(false, Collections.emptyList(), false);
+    public HttpMetricsCollector serverHttpMetricsCollector(AuroraServerConfiguration configuration) {
+        return new HttpMetricsCollector(false, configuration);
+    }
+
+    public enum MetricsMode {
+        ALL,
+        INCLUDE_MAPPINGS,
+        INCLUDE,
+        EXCLUDE
+    }
+
+    @ConfigurationProperties(prefix = "aurora.server")
+    static class AuroraServerConfiguration extends AuroraConfigurationTemplate {
+
     }
 
     @ConfigurationProperties(prefix = "aurora.client")
-    public static class AuroraClientConfiguration {
+    static class AuroraClientConfiguration extends AuroraConfigurationTemplate {
 
-        private boolean strict = false;
-        private Map<String, String> metricsPathLabelGroupings = new HashMap<>();
+    }
 
+    public static class AuroraConfigurationTemplate implements HttpMetricsCollectorSpecification {
 
-        public boolean isStrict() {
-            return strict;
-        }
+        MetricsMode mode = MetricsMode.ALL;
+        LinkedHashMap<String, String> metricsPathLabelGroupings = new LinkedHashMap<>();
+        LinkedHashMap<String, String> includes = new LinkedHashMap<>();
+        LinkedHashMap<String, String> excludes = new LinkedHashMap<>();
 
-        public void setStrict(boolean strict) {
-            this.strict = strict;
-        }
-
-        List<HttpMetricsCollector.PathGroup> asPathGroup() {
-            return metricsPathLabelGroupings.entrySet().stream()
-                .map(e -> new HttpMetricsCollector.PathGroup(e.getValue(), e.getKey()))
-                .collect(Collectors.toList());
-
-        }
-
+        @Override
         public Map<String, String> getMetricsPathLabelGroupings() {
             return metricsPathLabelGroupings;
+        }
+
+        @Override
+        public MetricsMode getMode() {
+            return mode;
+        }
+
+        @Override
+        public void setMode(MetricsMode mode) {
+            this.mode = mode;
+        }
+
+        @Override
+        public Map<String, String> getIncludes() {
+            return includes;
+        }
+
+        @Override
+        public Map<String, String> getExcludes() {
+            return excludes;
         }
     }
 

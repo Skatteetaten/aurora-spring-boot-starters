@@ -10,31 +10,25 @@ import io.prometheus.client.Collector;
 import io.prometheus.client.Histogram;
 import io.prometheus.client.SimpleTimer;
 
-public final class Execute extends Collector {
+public final class Operation extends Collector {
 
-    private static final Logger logger = LoggerFactory.getLogger(Execute.class);
+    private static final Logger logger = LoggerFactory.getLogger(Operation.class);
 
-    private static Execute instance;
+    private static Operation instance;
 
     private final Histogram executions;
 
-    public Execute() {
+    public Operation() {
         executions = Histogram.build()
-            .name("execute")
-            .help("Manual executions that we want statistics on")
-            .labelNames("type", "group", "name")
+            .name("operations")
+            .help("Manual operation that we want statistics on")
+            .labelNames("type", "name")
             .create();
         logger.debug("executions histogram registered");
 
     }
 
-    public static <T> T withMetrics(Class claz, String name,
-        Supplier<T> s) {
-        return withMetrics(claz.getName(), name, s);
-    }
-
-    public static <T> T withMetrics(String group, String name,
-        Supplier<T> s) {
+    public static <T> T measureOperationString(String name, Supplier<T> s) {
 
         SimpleTimer requestTimer = new SimpleTimer();
         String type = "success";
@@ -44,17 +38,17 @@ public final class Execute extends Collector {
             type = e.getClass().getSimpleName();
             throw e;
         } finally {
-            instance.executions.labels(type, group, name)
+            instance.executions.labels(type, name)
                 .observe(requestTimer.elapsedSeconds());
         }
     }
 
-    public static Execute getInstance() {
+    public static Operation getInstance() {
 
         if (instance == null) {
 
             logger.debug("Create new execute metrics");
-            instance = new Execute();
+            instance = new Operation();
         }
         return instance;
     }

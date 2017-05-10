@@ -2,31 +2,27 @@ package ske.aurora.prometheus.collector;
 
 import static ske.aurora.utils.PrometheusUrlNormalizer.normalize;
 
-import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 
 import io.prometheus.client.Collector;
 import io.prometheus.client.Histogram;
+import ske.aurora.prometheus.HttpMetricsCollectorSpecification;
 
 public class HttpMetricsCollector extends Collector {
 
-    private boolean isClient;
-    private final List<PathGroup> aggregations;
     private final Histogram requests;
-    private boolean strictMode;
+    private boolean isClient;
+    private HttpMetricsCollectorSpecification specification;
 
-    public HttpMetricsCollector(boolean isClient, List<PathGroup> aggregations,
-        boolean strictMode) {
+    public HttpMetricsCollector(boolean isClient, HttpMetricsCollectorSpecification specification) {
         this.isClient = isClient;
-        this.aggregations = Collections.unmodifiableList(aggregations);
-        this.strictMode = strictMode;
+        this.specification = specification;
 
-        if (strictMode && aggregations.isEmpty()) {
-            throw new IllegalArgumentException("Strict mode with no PathGroups is not allowed.");
-        }
         requests = Histogram.build()
             .name(String.format("http_%s_requests", isClient ? "client" : "server"))
             .help(String.format("Http %s requests", isClient ? "client" : "server"))
@@ -35,16 +31,29 @@ public class HttpMetricsCollector extends Collector {
     }
 
     public void record(String method, String requestUri, int statusCode, long start) {
+        Optional<String> name = findMatchingPathGroup(specification.getMetricsPathLabelGroupings(), requestUri);
 
-        Optional<PathGroup> pathGroup = findMatchingPathGroup(requestUri);
-
-        if (strictMode && !pathGroup.isPresent()) {
+        switch (specification.getMode()) {
+        case ALL:
             return;
+        case INCLUDE_MAPPINGS:
+            if (!name.isPresent()) {
+                return;
+            }
+            break;
+        case INCLUDE:
+            if (!findMatchingPathGroup(specification.getIncludes(), requestUri).isPresent()) {
+                return;
+            }
+            break;
+        case EXCLUDE:
+            if (findMatchingPathGroup(specification.getExcludes(), requestUri).isPresent()) {
+                return;
+            }
+            break;
         }
 
-        String path = pathGroup
-            .map(e -> e.name)
-            .orElse(normalize(requestUri, isClient));
+        String path = name.orElse(normalize(requestUri, isClient));
 
         long duration = System.nanoTime() - start;
         requests.labels(
@@ -55,10 +64,11 @@ public class HttpMetricsCollector extends Collector {
         ).observe(duration / Collector.NANOSECONDS_PER_SECOND);
     }
 
-    private Optional<PathGroup> findMatchingPathGroup(String url) {
+    private Optional<String> findMatchingPathGroup(Map<String, String> mappings, String url) {
 
-        return aggregations.stream()
-            .filter(e -> url.matches(e.regex))
+        return mappings.entrySet().stream()
+            .filter(e -> url.matches(e.getValue()))
+            .map(Map.Entry::getKey)
             .findFirst();
 
     }
@@ -68,13 +78,4 @@ public class HttpMetricsCollector extends Collector {
         return requests.collect();
     }
 
-    public static class PathGroup {
-        private final String regex;
-        private final String name;
-
-        public PathGroup(String regex, String name) {
-            this.regex = regex;
-            this.name = name;
-        }
-    }
 }
