@@ -12,7 +12,8 @@ import ske.aurora.prometheus.HttpMetricsCollectorSpecification;
 import ske.aurora.prometheus.collector.HttpMetricsCollector;
 
 @Configuration
-@EnableConfigurationProperties(HttpMetricsCollectorConfig.AuroraClientConfiguration.class)
+@EnableConfigurationProperties({HttpMetricsCollectorConfig.AuroraClientConfiguration.class,
+    HttpMetricsCollectorConfig.AuroraServerConfiguration.class})
 public class HttpMetricsCollectorConfig {
 
     @Bean(name = "client")
