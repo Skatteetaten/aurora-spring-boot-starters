@@ -13,9 +13,9 @@ import io.prometheus.client.hotspot.MemoryPoolsExports;
 import io.prometheus.client.hotspot.StandardExports;
 import io.prometheus.client.hotspot.ThreadExports;
 import io.prometheus.client.logback.InstrumentedAppender;
-import ske.aurora.prometheus.collector.Operation;
 import ske.aurora.prometheus.collector.HttpMetricsCollector;
 import ske.aurora.prometheus.collector.JvmGcMetrics;
+import ske.aurora.prometheus.collector.Operation;
 
 @Configuration
 public class MetricsConfig {

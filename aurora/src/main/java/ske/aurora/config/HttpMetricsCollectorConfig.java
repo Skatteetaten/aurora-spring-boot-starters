@@ -44,10 +44,10 @@ public class HttpMetricsCollectorConfig {
 
     public static class AuroraConfigurationTemplate implements HttpMetricsCollectorSpecification {
 
-        MetricsMode mode = MetricsMode.ALL;
-        LinkedHashMap<String, String> metricsPathLabelGroupings = new LinkedHashMap<>();
-        LinkedHashMap<String, String> includes = new LinkedHashMap<>();
-        LinkedHashMap<String, String> excludes = new LinkedHashMap<>();
+        private MetricsMode mode = MetricsMode.ALL;
+        private LinkedHashMap<String, String> metricsPathLabelGroupings = new LinkedHashMap<>();
+        private LinkedHashMap<String, String> includes = new LinkedHashMap<>();
+        private LinkedHashMap<String, String> excludes = new LinkedHashMap<>();
 
         @Override
         public Map<String, String> getMetricsPathLabelGroupings() {

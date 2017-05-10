@@ -2,7 +2,6 @@ package ske.aurora.prometheus.collector;
 
 import static ske.aurora.utils.PrometheusUrlNormalizer.normalize;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -34,8 +33,6 @@ public class HttpMetricsCollector extends Collector {
         Optional<String> name = findMatchingPathGroup(specification.getMetricsPathLabelGroupings(), requestUri);
 
         switch (specification.getMode()) {
-        case ALL:
-            return;
         case INCLUDE_MAPPINGS:
             if (!name.isPresent()) {
                 return;
@@ -50,6 +47,8 @@ public class HttpMetricsCollector extends Collector {
             if (findMatchingPathGroup(specification.getExcludes(), requestUri).isPresent()) {
                 return;
             }
+            break;
+        default:
             break;
         }
 
