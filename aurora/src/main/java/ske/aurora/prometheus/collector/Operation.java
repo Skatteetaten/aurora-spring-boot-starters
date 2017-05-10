@@ -28,7 +28,7 @@ public final class Operation extends Collector {
 
     }
 
-    public static <T> T measureOperationString(String name, Supplier<T> s) {
+    public static <T> T withMetrics(String name, Supplier<T> s) {
 
         SimpleTimer requestTimer = new SimpleTimer();
         String type = "success";
