@@ -4,6 +4,6 @@ fileLoader.withGit('https://git.aurora.skead.no/scm/ao/aurora-pipeline-scripts.g
    jenkinsfile = fileLoader.load('templates/bibliotek')
 }
 
-def overrides = [piTests: false]
+def overrides = [piTests: false, jacoco:false]
 
 jenkinsfile.run(version, overrides)
