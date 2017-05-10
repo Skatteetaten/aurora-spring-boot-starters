@@ -2,7 +2,6 @@ package ske.aurora.config;
 
 import java.util.Set;
 
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
