@@ -14,12 +14,6 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <properties>
-    <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-    <sonar.jacoco.reportPath>${project.basedir}/target/jacoco.exec</sonar.jacoco.reportPath>
-    <sonar.coverage.exclusions>**/*Main.java</sonar.coverage.exclusions>
-    <sonar.tests>src/test/groovy</sonar.tests>
-  </properties>
 
   <dependencies>
     <dependency>
