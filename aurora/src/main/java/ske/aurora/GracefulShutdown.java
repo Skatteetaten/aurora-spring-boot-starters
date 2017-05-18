@@ -13,12 +13,13 @@ import org.springframework.context.event.ContextClosedEvent;
 
 public class GracefulShutdown implements TomcatConnectorCustomizer, ApplicationListener<ContextClosedEvent> {
 
+    public static final int TIMEOUT_VALUE = 10;
     private static Logger logger = LoggerFactory.getLogger(GracefulShutdown.class);
     private Connector connector;
 
     @Override
-    public void customize(Connector connector) {
-        this.connector = connector;
+    public void customize(Connector c) {
+        this.connector = c;
     }
 
     @Override
@@ -32,7 +33,7 @@ public class GracefulShutdown implements TomcatConnectorCustomizer, ApplicationL
         ThreadPoolExecutor tpe = (ThreadPoolExecutor) executor;
         try {
             tpe.shutdown();
-            if (!tpe.awaitTermination(10, TimeUnit.SECONDS)) {
+            if (!tpe.awaitTermination(TIMEOUT_VALUE, TimeUnit.SECONDS)) {
                 logger.warn(
                     "Tomcat thread pool did not shut down gracefully within $shutdownTimeout $unit. Proceeding with "
                         + "forceful shutdown");
