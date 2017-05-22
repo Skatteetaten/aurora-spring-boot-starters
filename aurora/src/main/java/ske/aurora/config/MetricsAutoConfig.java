@@ -15,7 +15,7 @@ public class MetricsAutoConfig {
     @Bean
     public CollectorRegistry prometheusRegistry(Set<HttpMetricsCollector> httpCollectors) {
 
-        return MetricsConfig.init(httpCollectors);
+        return MetricsConfig.init(CollectorRegistry.defaultRegistry, httpCollectors);
 
     }
 
