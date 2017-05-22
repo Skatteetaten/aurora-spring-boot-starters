@@ -25,12 +25,14 @@ public class TimingInterceptor implements ClientHttpRequestInterceptor {
         HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
         throws IOException {
         long startTime = System.nanoTime();
+        int statusCode = 0;
 
-        ClientHttpResponse response = execution.execute(request, body);
-
-        collector
-            .record(request.getMethod().name(), request.getURI().toString(), response.getRawStatusCode(), startTime);
-
-        return response;
+        try {
+            ClientHttpResponse response = execution.execute(request, body);
+            statusCode = response.getRawStatusCode();
+            return response;
+        } finally {
+            collector.record(request.getMethod().name(), request.getURI().toString(), statusCode, startTime);
+        }
     }
 }
