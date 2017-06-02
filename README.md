@@ -1,4 +1,4 @@
-== Aurora Spring Boot Starters
+#Aurora Spring Boot Starters
 
 Starters for creating a spring boot application that integrates into the Aurora Openshift platform.
 
