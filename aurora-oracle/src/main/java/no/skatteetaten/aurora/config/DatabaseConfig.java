@@ -1,4 +1,4 @@
-package ske.aurora.config;
+package no.skatteetaten.aurora.config;
 
 import java.io.FileInputStream;
 import java.io.IOException;

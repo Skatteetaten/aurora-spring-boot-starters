@@ -1,4 +1,4 @@
-package ske.aurora.prometheus;
+package no.skatteetaten.aurora.prometheus;
 
 import java.io.IOException;
 
@@ -9,7 +9,7 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
 
-import ske.aurora.prometheus.collector.HttpMetricsCollector;
+import no.skatteetaten.aurora.prometheus.collector.HttpMetricsCollector;
 
 @Component
 public class TimingInterceptor implements ClientHttpRequestInterceptor {

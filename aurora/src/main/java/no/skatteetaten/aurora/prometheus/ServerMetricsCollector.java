@@ -1,4 +1,4 @@
-package ske.aurora.prometheus;
+package no.skatteetaten.aurora.prometheus;
 
 import java.io.IOException;
 
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import ske.aurora.prometheus.collector.HttpMetricsCollector;
+import no.skatteetaten.aurora.prometheus.collector.HttpMetricsCollector;
 
 @Component
 public class ServerMetricsCollector  implements Filter {

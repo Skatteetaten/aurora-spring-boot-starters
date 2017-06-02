@@ -1,4 +1,4 @@
-package ske.aurora.config;
+package no.skatteetaten.aurora.config;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,8 +20,8 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertiesPropertySource;
 import org.springframework.web.client.RestTemplate;
 
-import ske.aurora.GracefulShutdown;
-import ske.aurora.filter.logging.AuroraHeaderFilter;
+import no.skatteetaten.aurora.GracefulShutdown;
+import no.skatteetaten.aurora.filter.logging.AuroraHeaderFilter;
 
 /**
  * Class for doing basic application configuration and initialization. You can add to this class, but you should

@@ -1,12 +1,12 @@
-package ske.aurora.config;
+package no.skatteetaten.aurora.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import ske.aurora.prometheus.HttpMetricsCollectorConfig;
-import ske.aurora.prometheus.collector.HttpMetricsCollector;
+import no.skatteetaten.aurora.prometheus.HttpMetricsCollectorConfig;
+import no.skatteetaten.aurora.prometheus.collector.HttpMetricsCollector;
 
 @Configuration
 @EnableConfigurationProperties({ HttpMetricsCollectorAutoConfig.AuroraClientConfiguration.class,

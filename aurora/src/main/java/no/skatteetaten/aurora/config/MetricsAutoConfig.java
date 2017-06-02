@@ -1,4 +1,4 @@
-package ske.aurora.config;
+package no.skatteetaten.aurora.config;
 
 import java.util.Set;
 
@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import io.prometheus.client.CollectorRegistry;
-import ske.aurora.prometheus.MetricsConfig;
-import ske.aurora.prometheus.collector.HttpMetricsCollector;
+import no.skatteetaten.aurora.prometheus.MetricsConfig;
+import no.skatteetaten.aurora.prometheus.collector.HttpMetricsCollector;
 
 @Configuration
 public class MetricsAutoConfig {

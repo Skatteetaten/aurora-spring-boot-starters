@@ -1,4 +1,4 @@
-package ske.aurora.config;
+package no.skatteetaten.aurora.config;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +12,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.client.RestTemplate;
 
-import ske.aurora.prometheus.ServerMetricsCollector;
-import ske.aurora.prometheus.TimingInterceptor;
+import no.skatteetaten.aurora.prometheus.ServerMetricsCollector;
+import no.skatteetaten.aurora.prometheus.TimingInterceptor;
 
 @Configuration
 public class FilterConfig {

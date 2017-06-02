@@ -1,4 +1,4 @@
-package ske.aurora;
+package no.skatteetaten.aurora;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
