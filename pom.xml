@@ -55,6 +55,7 @@
     <module>aurora</module>
     <module>aurora-oracle</module>
     <module>aurora-spock</module>
+    <module>aurora-reactive-kafka</module>
   </modules>
 
   <properties>
@@ -158,7 +159,6 @@
                 <requireMavenVersion>
                   <version>[${maven.min-version},)</version>
                 </requireMavenVersion>
-                <DependencyConvergence />
                 <requirePluginVersions>
                   <message>Best Practice is to always define plugin versions!</message>
                   <banLatest>true</banLatest>
