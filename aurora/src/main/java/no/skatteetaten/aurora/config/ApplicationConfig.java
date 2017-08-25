@@ -2,6 +2,7 @@ package no.skatteetaten.aurora.config;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
@@ -41,6 +42,8 @@ public class ApplicationConfig {
     public GracefulShutdown gs() {
         return new GracefulShutdown();
     }
+
+
 
     @Bean
     public EmbeddedServletContainerCustomizer tomcatCustomizer(GracefulShutdown gs) {
