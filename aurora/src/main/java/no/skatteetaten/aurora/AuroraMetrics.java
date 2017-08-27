@@ -2,25 +2,19 @@ package no.skatteetaten.aurora;
 
 import static java.util.Arrays.asList;
 
-import static io.micrometer.core.instrument.stats.hist.CumulativeHistogram.linear;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
-import io.micrometer.core.instrument.stats.hist.CumulativeHistogram;
 
 @Component
 public final class AuroraMetrics {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuroraMetrics.class);
     private MeterRegistry registry;
 
     public AuroraMetrics(MeterRegistry registry) {
@@ -46,7 +40,6 @@ public final class AuroraMetrics {
                 Tag.of("name", name));
 
             registry.timerBuilder("operations")
-                .histogram(CumulativeHistogram.buckets(linear(0, 100, 20), TimeUnit.MILLISECONDS))
                 .tags(tags)
                 .description("Manual operation that we want metrics on")
                 .create().record(System.nanoTime() - startTime, TimeUnit.NANOSECONDS);
