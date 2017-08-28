@@ -8,11 +8,9 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.metadata.DataSourcePoolMetadataProvider;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.core.instrument.binder.ThreadMetrics;
 import io.micrometer.spring.SpringMeters;
 
 @Configuration
@@ -38,8 +36,4 @@ class AuroraMetricsConfig {
             "data.source");
     }
 
-    @Bean
-    ThreadMetrics threadMetrics() {
-        return new ThreadMetrics();
-    }
 }
