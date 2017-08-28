@@ -53,7 +53,6 @@
 
   <modules>
     <module>aurora</module>
-    <module>aurora-spock</module>
   </modules>
 
   <properties>
