@@ -1,0 +1,1 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=no.skatteetaten.aurora.config.AuroraChannelInterceptor
