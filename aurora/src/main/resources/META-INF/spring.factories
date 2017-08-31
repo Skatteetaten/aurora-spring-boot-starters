@@ -1,8 +1,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   no.skatteetaten.aurora.config.ApplicationConfig,\
-  no.skatteetaten.aurora.config.FilterConfig,\
-  no.skatteetaten.aurora.config.HttpMetricsCollectorAutoConfig,\
-  no.skatteetaten.aurora.config.MetricsAutoConfig,\
-  no.skatteetaten.aurora.prometheus.ServerMetricsCollector,\
-  no.skatteetaten.aurora.prometheus.TimingInterceptor,\
-  no.skatteetaten.aurora.prometheus.AuroraPrometheusEndpoint
+  no.skatteetaten.aurora.config.DatabaseConfig,\
+  no.skatteetaten.aurora.config.AuroraMetricsConfig,\
+  no.skatteetaten.aurora.AuroraMetrics

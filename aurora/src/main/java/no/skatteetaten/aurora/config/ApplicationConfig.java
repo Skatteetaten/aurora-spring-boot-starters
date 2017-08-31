@@ -20,6 +20,7 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertiesPropertySource;
 import org.springframework.web.client.RestTemplate;
 
+import io.micrometer.core.instrument.binder.ThreadMetrics;
 import no.skatteetaten.aurora.GracefulShutdown;
 import no.skatteetaten.aurora.filter.logging.AuroraHeaderFilter;
 
@@ -134,4 +135,8 @@ public class ApplicationConfig {
         return new RestTemplate();
     }
 
+    @Bean
+    ThreadMetrics threadMetrics() {
+        return new ThreadMetrics();
+    }
 }
