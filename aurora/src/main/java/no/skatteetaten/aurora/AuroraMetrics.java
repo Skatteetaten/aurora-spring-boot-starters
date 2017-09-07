@@ -1,6 +1,6 @@
 package no.skatteetaten.aurora;
 
-import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 
 import java.util.Collections;
 import java.util.List;
@@ -13,7 +13,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
 
 @Component
-public final class AuroraMetrics {
+public class AuroraMetrics {
 
     private MeterRegistry registry;
 
@@ -22,10 +22,10 @@ public final class AuroraMetrics {
     }
 
     public <T> T withMetrics(String name, Supplier<T> s) {
-        return withMetrics(name, "operation", s);
+        return withMetrics(name, emptyList(), s);
     }
 
-    public <T> T withMetrics(String name, String type, Supplier<T> s) {
+    public <T> T withMetrics(String name, List<Tag> tags, Supplier<T> s) {
         long startTime = System.nanoTime();
 
         String result = "success";
@@ -35,9 +35,8 @@ public final class AuroraMetrics {
             result = e.getClass().getSimpleName();
             throw e;
         } finally {
-            List<Tag> tags = asList(Tag.of("result", result),
-                Tag.of("type", type),
-                Tag.of("name", name));
+            tags.add(Tag.of("result", result));
+            tags.add(Tag.of("name", name));
 
             registry.timerBuilder("operations")
                 .tags(tags)
@@ -49,12 +48,17 @@ public final class AuroraMetrics {
     }
 
     public void status(String name, StatusValue value) {
+        status(name, value, emptyList());
+    }
 
-        List<Tag> tags = Collections.singletonList(Tag.of("name", name));
+    public void status(String name, StatusValue value, List<Tag> tags) {
+
+        tags.add(Tag.of("name", name));
 
         registry.gauge("last_status", tags, value.getValue());
 
-        List<Tag> tags2 = asList(Tag.of("name", name), Tag.of("status", value.name()));
+        List<Tag> tags2 = Collections.singletonList(Tag.of("status", value.name()));
+        tags2.addAll(tags);
         registry.counter("statuses", tags2).increment();
     }
 
