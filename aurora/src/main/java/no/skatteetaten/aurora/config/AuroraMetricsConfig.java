@@ -8,7 +8,7 @@ import io.micrometer.core.instrument.binder.ProcessorMetrics;
 import io.micrometer.core.instrument.binder.ThreadMetrics;
 
 @Configuration
-public class AuroraMetrics {
+public class AuroraMetricsConfig {
 
     @Bean
     ThreadMetrics threadMetrics() {
