@@ -15,7 +15,7 @@ import io.micrometer.spring.SpringMeters;
 
 @Configuration
 @ConditionalOnProperty(prefix = "aurora", value = "db")
-class AuroraMetricsConfig {
+class AuroraDatabaseMetricsConfig {
 
     @Autowired
     private DataSource dataSource;
