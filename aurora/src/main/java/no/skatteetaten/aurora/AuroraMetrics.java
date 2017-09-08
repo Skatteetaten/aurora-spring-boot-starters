@@ -1,8 +1,9 @@
 package no.skatteetaten.aurora;
 
-import static java.util.Collections.emptyList;
+import static java.util.Arrays.asList;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
@@ -22,10 +23,10 @@ public class AuroraMetrics {
     }
 
     public <T> T withMetrics(String name, Supplier<T> s) {
-        return withMetrics(name, emptyList(), s);
+        return withMetrics(name, asList(), s);
     }
 
-    public <T> T withMetrics(String name, List<Tag> tags, Supplier<T> s) {
+    public <T> T withMetrics(String name, List<Tag> inputTags, Supplier<T> s) {
         long startTime = System.nanoTime();
 
         String result = "success";
@@ -35,8 +36,13 @@ public class AuroraMetrics {
             result = e.getClass().getSimpleName();
             throw e;
         } finally {
+
+            List<Tag> tags = new ArrayList<>();
+            tags.addAll(inputTags);
             tags.add(Tag.of("result", result));
             tags.add(Tag.of("name", name));
+
+            tags.addAll(inputTags);
 
             registry.timerBuilder("operations")
                 .tags(tags)
@@ -48,18 +54,18 @@ public class AuroraMetrics {
     }
 
     public void status(String name, StatusValue value) {
-        status(name, value, emptyList());
+        status(name, value, Arrays.asList());
     }
 
-    public void status(String name, StatusValue value, List<Tag> tags) {
+    public void status(String name, StatusValue value, List<Tag> inputTags) {
 
+        List<Tag> tags = new ArrayList<>();
+        tags.addAll(inputTags);
         tags.add(Tag.of("name", name));
 
         registry.gauge("last_status", tags, value.getValue());
-
-        List<Tag> tags2 = Collections.singletonList(Tag.of("status", value.name()));
-        tags2.addAll(tags);
-        registry.counter("statuses", tags2).increment();
+        tags.add(Tag.of("status", value.name()));
+        registry.counter("statuses", tags).increment();
     }
 
     public enum StatusValue {
