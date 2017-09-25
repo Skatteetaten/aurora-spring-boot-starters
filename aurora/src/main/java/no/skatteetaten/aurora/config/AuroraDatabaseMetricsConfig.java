@@ -36,5 +36,4 @@ class AuroraDatabaseMetricsConfig {
             "data.source",
             Collections.emptyList()).bindTo(registry);
     }
-
 }

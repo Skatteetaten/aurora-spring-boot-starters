@@ -53,11 +53,10 @@ public class AuroraMetrics {
                 .register(registry)
                 .record(System.nanoTime() - startTime, TimeUnit.NANOSECONDS);
         }
-
     }
 
     public void status(String name, StatusValue value) {
-        status(name, value, Arrays.asList());
+        status(name, value, emptyList());
     }
 
     public void status(String name, StatusValue value, List<Tag> inputTags) {
