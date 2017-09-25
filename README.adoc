@@ -1,5 +1,100 @@
-# Aurora Spring Boot Starter
+= Aurora Spring Boot Starter
 
-A starter for including common configuration in Spring Boot for running an application on Aurora Openshift
+A starter for including common configuration in Spring Boot for running an application on Aurora OpenShift. The starter
+is part of the Aurora Reference Architecture and an example can be found at in the repository for
+https://github.com/Skatteetaten/openshift-reference-springboot-server[the reference application].
 
-For an example on how to use these look at [the reference application](https://github.com/Skatteetaten/openshift-reference-springboot-server)
+The starter will add some of the standard Spring Boot starters;
+https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready[Spring Boot Actuator],
+http://projects.spring.io/spring-hateoas/[Spring HATEOAS],
+https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#using-boot-devtools[Spring Boot Developer Tools]
+and https://docs.spring.io/spring-boot/docs/2.0.x/reference/htmlsingle/#production-ready-metrics[Micrometer Prometheus]
+in addition to pulling in the proprietary
+https://github.com/Skatteetaten/aurora-header-mdc-filter[aurora-header-mdc-filter]. Please reference the documentation
+for these individual components for details.
+
+In addition to adding the mentioned dependencies, the starter also provides a couple of utilities on its own, descripted
+next.
+
+== How to use
+
+[source,java]
+----
+package no.skatteetaten...;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import no.skatteetaten.aurora.annotations.AuroraApplication;
+
+@SpringBootApplication
+@AuroraApplication
+public class Main {
+
+    public static void main(String[] args) throws Exception {
+        SpringApplication.run(Main.class, args);
+    }
+}
+----
+
+== Features
+
+=== Register the Aurora Header MDC Filter
+
+The starter will register the Aurora Header MDC Filter. The registration can be disabled with the property
+
+  aurora.starter.headerfilter.enabled = false
+
+
+=== Create property sources for Aurora config files
+
+During startup a PropertySource for the configuration in the Aurora Secret properties file (auroraConfig[secret]) and
+the Aurora Env properties file (auroraConfig[env]) will be created. These properties files are automatically mounted
+when deploying on OpenShift based on your AuroraConfig. It will also create a property source from the environment
+variables set by by the platform during deploy.
+
+
+=== Graceful Shutdown Handler for Tomcat
+
+The starter will add a graceful shutdown handler for Tomcat (without it Tomcat may terminate ongoing requests on SIGTERM)
+
+
+=== Default values for the Aurora Management Interface
+
+info.serviceLinks.metrics={metricsHostname}/dashboard/db/openshift-project-spring-actuator-view?var-ds=openshift-{cluster}-ose&var-namespace={namespace}&var-app={name}
+info.podLinks.metrics={metricsHostname}/dashboard/db/openshift-project-spring-actuator-view-instance?var-ds=openshift-{cluster}-ose&var-namespace={namespace}&var-app={name}&var-instance={podName}
+
+
+=== Metrics
+
+
+=== Auto registration of DataSource
+
+
+=== Configuration of the Actuator Endpoints
+
+endpoints.auditevents.enabled=false
+endpoints.heapdump.enabled=false
+endpoints.metrics.enabled=false
+endpoints.logfile.enabled=false
+endpoints.autoconfig.enabled=false
+endpoints.configprops.enabled=false
+endpoints.mappings.enabled=false
+endpoints.beans.enabled=false
+endpoints.dump.enabled=false
+endpoints.jolokia.enabled=false
+
+management.port=${MANAGEMENT_HTTP_PORT:8081}
+management.health.status.order=DOWN, OUT_OF_SERVICE, UNKNOWN, OBSERVE, UP
+management.security.enabled=false
+endpoints.metrics.filter.enabled=false
+
+=== Setting of Spring Boot Properties
+spring.application.name=${APP_NAME:my}-${POD_NAMESPACE:app}
+spring.jackson.date-format=com.fasterxml.jackson.databind.util.ISO8601DateFormat
+flyway.out-of-order=true
+
+
+
+
+
