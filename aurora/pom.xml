@@ -33,8 +33,6 @@
       <artifactId>spring-boot-devtools</artifactId>
     </dependency>
 
-
-
     <dependency>
       <groupId>io.micrometer</groupId>
       <artifactId>micrometer-spring-legacy</artifactId>
@@ -45,10 +43,6 @@
       <artifactId>micrometer-prometheus-starter</artifactId>
       <version>${micrometer.version}</version>
     </dependency>
-
-
-
-
   </dependencies>
 </project>
 

@@ -1,6 +1,7 @@
 package no.skatteetaten.aurora.config;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
@@ -11,7 +12,7 @@ import org.springframework.boot.autoconfigure.jdbc.metadata.DataSourcePoolMetada
 import org.springframework.context.annotation.Configuration;
 
 import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.spring.SpringMeters;
+import io.micrometer.spring.jdbc.DataSourceMetrics;
 
 @Configuration
 @ConditionalOnProperty(prefix = "aurora", value = "db")
@@ -29,11 +30,11 @@ class AuroraDatabaseMetricsConfig {
     @PostConstruct
     private void instrumentDataSource() {
 
-        SpringMeters.monitor(
-            registry,
+        new DataSourceMetrics(
             dataSource,
             metadataProviders,
-            "data.source");
+            "data.source",
+            Collections.emptyList()).bindTo(registry);
     }
 
 }
