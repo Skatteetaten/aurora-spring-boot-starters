@@ -63,18 +63,43 @@ The starter will add a graceful shutdown handler for Tomcat (without it Tomcat m
 
 === The Aurora Management Interface
 
-==== Default config values
+The starter will help you implement the requirements for the Aurora Management Interface by setting some common
+configuration values. For more information see
+https://aurora/wiki/pages/viewpage.action?pageId=121279406[Management interface og helseovervåkning].
+
+Note that the `management.port` will be set to the value of the `MANAGEMENT_HTTP_PORT` environment variable provided
+by the platform. The default is to put all actuator endpoints on a different port than the main application/api
+endpoints.
+
+[source]
+----
 info.serviceLinks.metrics={metricsHostname}/dashboard/db/openshift-project-spring-actuator-view?var-ds=openshift-{cluster}-ose&var-namespace={namespace}&var-app={name}
+
 info.podLinks.metrics={metricsHostname}/dashboard/db/openshift-project-spring-actuator-view-instance?var-ds=openshift-{cluster}-ose&var-namespace={namespace}&var-app={name}&var-instance={podName}
 
 management.health.status.order=DOWN, OUT_OF_SERVICE, UNKNOWN, OBSERVE, UP
-
+management.port=${MANAGEMENT_HTTP_PORT:8081}
+----
 
 === Metrics
 
+The starter will automatically add http://micrometer.io[Micrometer] (the upcoming spring boot default) as the default
+metrics registry and also add `micrometer-prometheus-starter` for providing the `/prometheus` actuator endpoint that
+will be (optionally) read by Prometheus automatically for all applications deployed on Aurora OpenShift.
+
+Additionally a number of Micrometer metrics collectors will be automatically registered;
+
+* JvmThreadMetrics
+* ProcessorMetrics
+* JvmGcMetrics
+* JvmMemoryMetrics
+* LogbackMetrics
+* UptimeMetrics
 
 === Auto registration of DataSource
 
+If the `aurora.db` property is set, a DataSource will be automatically created from the properties files provided by
+the platform when deploying to Aurora OpenShift. Metrics will also be collected from the DataSource.
 
 === Configuration of the Actuator Endpoints
 
@@ -97,8 +122,17 @@ metrics filter will be disabled.
 
 
 === Setting of Spring Boot Properties
+
+The spring boot application name will be set from the environment variables APP_NAME and POD_NAMESPACE provided by the
+platform when deploying to Aurora OpenShift.
+
+The `flyway.out-of-order` mode will also be activated to allow migrations to be developed in different feature branches
+at the same time. See the Flyway documentation for more information.
+[source]
+----
 spring.application.name=${APP_NAME:my}-${POD_NAMESPACE:app}
 spring.jackson.date-format=com.fasterxml.jackson.databind.util.ISO8601DateFormat
 flyway.out-of-order=true
+----
 
 
