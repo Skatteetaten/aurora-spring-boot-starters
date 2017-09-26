@@ -1,4 +1,5 @@
 = Aurora Spring Boot Starter
+:toc:
 
 A starter for including common configuration in Spring Boot for running an application on Aurora OpenShift. The starter
 is part of the Aurora Reference Architecture and an example can be found at in the repository for
@@ -98,11 +99,5 @@ metrics filter will be disabled.
 spring.application.name=${APP_NAME:my}-${POD_NAMESPACE:app}
 spring.jackson.date-format=com.fasterxml.jackson.databind.util.ISO8601DateFormat
 flyway.out-of-order=true
-
-----
-
-include::Jenkinsfile[]
-
-----
 
 
