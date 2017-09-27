@@ -4,15 +4,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import io.micrometer.core.instrument.binder.JvmGcMetrics;
+import io.micrometer.core.instrument.binder.JvmThreadMetrics;
 import io.micrometer.core.instrument.binder.ProcessorMetrics;
-import io.micrometer.core.instrument.binder.ThreadMetrics;
+import io.micrometer.core.instrument.binder.UptimeMetrics;
 
 @Configuration
 public class AuroraMetricsConfig {
 
     @Bean
-    ThreadMetrics threadMetrics() {
-        return new ThreadMetrics();
+    JvmThreadMetrics threadMetrics() {
+        return new JvmThreadMetrics();
     }
 
     @Bean
@@ -23,6 +24,10 @@ public class AuroraMetricsConfig {
     @Bean
     JvmGcMetrics gcMetrics() {
         return new JvmGcMetrics();
+    }
 
+    @Bean
+    UptimeMetrics uptimeMetrics() {
+        return new UptimeMetrics();
     }
 }

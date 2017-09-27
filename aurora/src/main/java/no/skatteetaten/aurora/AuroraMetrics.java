@@ -1,9 +1,8 @@
 package no.skatteetaten.aurora;
 
-import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
+import io.micrometer.core.instrument.Timer;
 
 @Component
 public class AuroraMetrics {
@@ -23,7 +23,7 @@ public class AuroraMetrics {
     }
 
     public <T> T withMetrics(String name, Supplier<T> s) {
-        return withMetrics(name, asList(), s);
+        return withMetrics(name, emptyList(), s);
     }
 
     public <T> T withMetrics(String name, List<Tag> inputTags, Supplier<T> s) {
@@ -44,17 +44,16 @@ public class AuroraMetrics {
 
             tags.addAll(inputTags);
 
-            registry.timerBuilder("operations")
+            Timer.builder("operations")
                 .tags(tags)
                 .description("Manual operation that we want metrics on")
-                .create().record(System.nanoTime() - startTime, TimeUnit.NANOSECONDS);
-
+                .register(registry)
+                .record(System.nanoTime() - startTime, TimeUnit.NANOSECONDS);
         }
-
     }
 
     public void status(String name, StatusValue value) {
-        status(name, value, Arrays.asList());
+        status(name, value, emptyList());
     }
 
     public void status(String name, StatusValue value, List<Tag> inputTags) {

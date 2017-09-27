@@ -7,14 +7,9 @@ import java.lang.annotation.Target;
 
 import org.springframework.context.annotation.PropertySource;
 
-import io.micrometer.spring.EnableMetrics;
-import io.micrometer.spring.export.prometheus.EnablePrometheusMetrics;
-
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @PropertySource("classpath:aurora-openshift-spring-boot-starter.properties")
-@EnableMetrics
-@EnablePrometheusMetrics
 public @interface AuroraApplication {
 
 }
