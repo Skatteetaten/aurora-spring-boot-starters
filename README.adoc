@@ -84,7 +84,7 @@ management.port=${MANAGEMENT_HTTP_PORT:8081}
 === Metrics
 
 The starter will automatically add http://micrometer.io[Micrometer] (the upcoming spring boot default) as the default
-metrics registry and also add `micrometer-prometheus-starter` for providing the `/prometheus` actuator endpoint that
+metrics registry and also add `micrometer-registry-prometheus` for providing the `/prometheus` actuator endpoint that
 will be (optionally) read by Prometheus automatically for all applications deployed on Aurora OpenShift.
 
 Additionally a number of Micrometer metrics collectors will be automatically registered;
