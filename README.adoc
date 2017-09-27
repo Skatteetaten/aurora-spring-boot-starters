@@ -96,6 +96,10 @@ Additionally a number of Micrometer metrics collectors will be automatically reg
 * LogbackMetrics
 * UptimeMetrics
 
+To get an overview of how Micrometer works we encourage you to read the Micrometer docs:
+https://micrometer.io/docs/prometheus. Especially the Spring Support section (https://micrometer.io/docs/prometheus#_spring_support)
+that will describe what is auto configured for you, and what you get out of the box in a Spring Boot application.
+
 === Auto registration of DataSource
 
 If the `aurora.db` property is set, a DataSource will be automatically created from the properties files provided by
