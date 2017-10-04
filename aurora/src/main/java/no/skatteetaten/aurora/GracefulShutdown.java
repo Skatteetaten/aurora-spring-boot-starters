@@ -24,6 +24,10 @@ public class GracefulShutdown implements TomcatConnectorCustomizer, ApplicationL
 
     @Override
     public void onApplicationEvent(ContextClosedEvent contextClosedEvent) {
+        if (connector == null) {
+            // We have seen cases where connector is null in some unit test environments.
+            return;
+        }
         this.connector.pause();
         Executor executor = this.connector.getProtocolHandler().getExecutor();
         if (!(executor instanceof ThreadPoolExecutor)) {
