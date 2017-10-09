@@ -16,6 +16,7 @@ import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletCon
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertiesPropertySource;
 import org.springframework.web.client.RestTemplate;
@@ -28,6 +29,7 @@ import no.skatteetaten.aurora.filter.logging.AuroraHeaderFilter;
  * probably not change very much (know why, at the very least).
  */
 @Configuration
+@PropertySource("src/main/resources/aurora-openshift-spring-boot-starter.properties")
 public class ApplicationConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(ApplicationConfig.class);
