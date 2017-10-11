@@ -19,7 +19,7 @@ In addition to adding the mentioned dependencies, the starter also provides a co
 next.
 
 == How to use
-
+TODO: Gir dette mening, Det er jo ikke noe endring i main classen nå.
 [source,java]
 ----
 package no.skatteetaten...;
@@ -27,10 +27,7 @@ package no.skatteetaten...;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import no.skatteetaten.aurora.annotations.AuroraApplication;
-
 @SpringBootApplication
-@AuroraApplication
 public class Main {
 
     public static void main(String[] args) throws Exception {
@@ -95,6 +92,7 @@ Additionally a number of Micrometer metrics collectors will be automatically reg
 * JvmMemoryMetrics
 * LogbackMetrics
 * UptimeMetrics
+* FileDescriptorMetrics
 
 To get an overview of how Micrometer works we encourage you to read the Micrometer docs:
 https://micrometer.io/docs/prometheus. Especially the Spring Support section (https://micrometer.io/docs/prometheus#_spring_support)
@@ -102,8 +100,11 @@ that will describe what is auto configured for you, and what you get out of the 
 
 === Auto registration of DataSource
 
-If the `aurora.db` property is set, a DataSource will be automatically created from the properties files provided by
-the platform when deploying to Aurora OpenShift. Metrics will also be collected from the DataSource.
+If a database is provided on OpenShift there will automatically be a DataSource created from the properties files provided
+by the platform. If you want to override to use a specific database you can set the `aurora.db` property if you have more
+then one db in your application.
+
+Connection count metrics will also be collected from the DataSource.
 
 === Configuration of the Actuator Endpoints
 

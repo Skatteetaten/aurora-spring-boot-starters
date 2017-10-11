@@ -29,7 +29,7 @@ import no.skatteetaten.aurora.filter.logging.AuroraHeaderFilter;
  * probably not change very much (know why, at the very least).
  */
 @Configuration
-@PropertySource("src/main/resources/aurora-openshift-spring-boot-starter.properties")
+@PropertySource("classpath:aurora-openshift-spring-boot-starter.properties")
 public class ApplicationConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(ApplicationConfig.class);
