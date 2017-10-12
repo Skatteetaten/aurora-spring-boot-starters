@@ -1,8 +1,8 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  no.skatteetaten.aurora.StringToDurationConverter,\
   no.skatteetaten.aurora.config.ApplicationConfig,\
   no.skatteetaten.aurora.config.DatabaseConfig,\
   no.skatteetaten.aurora.config.DatabaseConfigDefault,\
   no.skatteetaten.aurora.config.AuroraMetricsConfig,\
   no.skatteetaten.aurora.config.AuroraDatabaseMetricsConfig,\
-  no.skatteetaten.aurora.AuroraMetrics,\
-  no.skatteetaten.aurora.StringToDurationConverter
+  no.skatteetaten.aurora.AuroraMetrics
