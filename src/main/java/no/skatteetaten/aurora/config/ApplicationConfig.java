@@ -21,6 +21,7 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertiesPropertySource;
 import org.springframework.web.client.RestTemplate;
 
+import io.micrometer.spring.autoconfigure.export.StringToDurationConverter;
 import no.skatteetaten.aurora.GracefulShutdown;
 import no.skatteetaten.aurora.filter.logging.AuroraHeaderFilter;
 
@@ -34,9 +35,11 @@ public class ApplicationConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(ApplicationConfig.class);
     private ConfigurableEnvironment env;
+    private StringToDurationConverter converter;
 
-    public ApplicationConfig(ConfigurableEnvironment env) {
+    public ApplicationConfig(ConfigurableEnvironment env, StringToDurationConverter converter) {
         this.env = env;
+        this.converter = converter;
     }
 
     @Bean
