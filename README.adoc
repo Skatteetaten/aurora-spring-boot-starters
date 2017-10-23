@@ -142,7 +142,7 @@ spring.metrics.web.server.record-request-percentiles=true
 
 If a database is provided on OpenShift there will automatically be a DataSource created from the properties files provided
 by the platform. If you want to override to use a specific database you can set the `aurora.db` property if you have more
-then one db in your application.
+than one db in your application.
 
 Connection count metrics will also be collected from the DataSource.
 
