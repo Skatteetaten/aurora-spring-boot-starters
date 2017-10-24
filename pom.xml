@@ -1,19 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
   <groupId>no.skatteetaten.aurora.springboot</groupId>
-  <artifactId>aurora-spring-boot-starter-parent</artifactId>
-  <version>3.2-SNAPSHOT</version>
-  <packaging>pom</packaging>
+  <artifactId>aurora-spring-boot-starter</artifactId>
+  <version>3.3-SNAPSHOT</version>
+  <packaging>jar</packaging>
 
-  <name>aurora-spring-boot-starter-parent</name>
-  <description>Parent for all aurora spring-boot-starters</description>
-  <url>https://github.com/Skatteetaten/aurora-spring-boot-starters</url>
+  <name>aurora-spring-boot-starter</name>
+  <description>Starter for an aurora spring-boot app</description>
 
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.5.6.RELEASE</version>
+    <version>1.5.8.RELEASE</version>
     <relativePath /> <!-- lookup parent from repository -->
   </parent>
 
@@ -24,10 +22,6 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-
-  <prerequisites>
-    <maven>${maven.min-version}</maven>
-  </prerequisites>
 
   <distributionManagement>
     <snapshotRepository>
@@ -51,16 +45,45 @@
     </developer>
   </developers>
 
-  <modules>
-    <module>aurora</module>
-  </modules>
-
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
     <maven.min-version>3.3.3</maven.min-version>
+    <micrometer.version>1.0.0-rc.2</micrometer.version>
   </properties>
+
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-hateoas</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>no.skatteetaten.aurora</groupId>
+      <artifactId>aurora-header-mdc-filter</artifactId>
+      <version>2.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-spring-legacy</artifactId>
+      <version>${micrometer.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-registry-prometheus</artifactId>
+      <version>${micrometer.version}</version>
+    </dependency>
+  </dependencies>
 
   <build>
     <pluginManagement>

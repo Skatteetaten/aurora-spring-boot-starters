@@ -19,25 +19,55 @@ In addition to adding the mentioned dependencies, the starter also provides a co
 next.
 
 == How to use
+Include the starter as a dependency
 
-[source,java]
+[source,xml]
 ----
-package no.skatteetaten...;
+<dependency>
+  <groupId>no.skatteetaten.aurora.springboot</groupId>
+  <artifactId>aurora-spring-boot-starter</artifactId>
+  <version>${aurora.starters.version}</version>
+</dependency>
+----
 
+Adjust your maven start class to look like this
+
+
+[source, java]
+----
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-import no.skatteetaten.aurora.annotations.AuroraApplication;
+import io.micrometer.spring.autoconfigure.export.StringToDurationConverter;
 
 @SpringBootApplication
-@AuroraApplication
+@Configuration
+@Import(StringToDurationConverter.class)
 public class Main {
+
+    protected Main() {
+    }
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(Main.class, args);
     }
 }
 ----
+
+Add the following to your application.yaml file
+[source]
+----
+spring:
+    metrics:
+        prometheus:
+            timerPercentilesMax: "PT5S"
+            timerPercentilesMin: "PT0.1S"
+----
+
+There is a bug in micrometer 1.0.0-rc2 prometheus support that required the manual import of the StringToDurationConverter, this also prohibits us from setting default vaules for timerPercentils.
+This will be fixed in an upcomming version of this starter.
 
 == Features
 
@@ -95,15 +125,26 @@ Additionally a number of Micrometer metrics collectors will be automatically reg
 * JvmMemoryMetrics
 * LogbackMetrics
 * UptimeMetrics
+* FileDescriptorMetrics
 
 To get an overview of how Micrometer works we encourage you to read the Micrometer docs:
 https://micrometer.io/docs/prometheus. Especially the Spring Support section (https://micrometer.io/docs/prometheus#_spring_support)
 that will describe what is auto configured for you, and what you get out of the box in a Spring Boot application.
 
+Outgoing and incomming HTTP metrics have timerPercentiles set by default.
+[source]
+----
+spring.metrics.web.client.record-request-percentiles=true
+spring.metrics.web.server.record-request-percentiles=true
+----
+
 === Auto registration of DataSource
 
-If the `aurora.db` property is set, a DataSource will be automatically created from the properties files provided by
-the platform when deploying to Aurora OpenShift. Metrics will also be collected from the DataSource.
+If a database is provided on OpenShift there will automatically be a DataSource created from the properties files provided
+by the platform. If you want to override to use a specific database you can set the `aurora.db` property if you have more
+than one db in your application.
+
+Connection count metrics will also be collected from the DataSource.
 
 === Configuration of the Actuator Endpoints
 
@@ -132,11 +173,17 @@ platform when deploying to Aurora OpenShift.
 
 The `flyway.out-of-order` mode will also be activated to allow migrations to be developed in different feature branches
 at the same time. See the Flyway documentation for more information.
+
+The AURORA_VERSION and IMAGE_BUILD_TIME variables are included in spring boots actuator output since we use them in a central
+management overview dashboard.
+
 [source]
 ----
 spring.application.name=${APP_NAME:my}-${POD_NAMESPACE:app}
 spring.jackson.date-format=com.fasterxml.jackson.databind.util.ISO8601DateFormat
 flyway.out-of-order=true
+info.auroraVersion= ${AURORA_VERSION:local-dev}
+info.imageBuildTime=${IMAGE_BUILD_TIME:}
 ----
 
 

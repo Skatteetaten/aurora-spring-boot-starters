@@ -7,7 +7,7 @@ import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.jdbc.metadata.DataSourcePoolMetadataProvider;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,7 +15,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.spring.jdbc.DataSourceMetrics;
 
 @Configuration
-@ConditionalOnProperty(prefix = "aurora", value = "db")
+@ConditionalOnBean(DataSource.class)
 class AuroraDatabaseMetricsConfig {
 
     @Autowired

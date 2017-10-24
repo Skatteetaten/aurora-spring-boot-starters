@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Timer;
+import io.micrometer.core.instrument.stats.hist.Histogram;
 
 @Component
 public class AuroraMetrics {
@@ -47,6 +48,7 @@ public class AuroraMetrics {
             Timer.builder("operations")
                 .tags(tags)
                 .description("Manual operation that we want metrics on")
+                .histogram(Histogram.percentilesTime())
                 .register(registry)
                 .record(System.nanoTime() - startTime, TimeUnit.NANOSECONDS);
         }

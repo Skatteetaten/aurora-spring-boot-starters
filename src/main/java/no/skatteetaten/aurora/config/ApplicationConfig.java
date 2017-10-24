@@ -16,10 +16,13 @@ import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletCon
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertiesPropertySource;
 import org.springframework.web.client.RestTemplate;
 
+import io.micrometer.spring.autoconfigure.export.StringToDurationConverter;
 import no.skatteetaten.aurora.GracefulShutdown;
 import no.skatteetaten.aurora.filter.logging.AuroraHeaderFilter;
 
@@ -28,6 +31,8 @@ import no.skatteetaten.aurora.filter.logging.AuroraHeaderFilter;
  * probably not change very much (know why, at the very least).
  */
 @Configuration
+@Import(StringToDurationConverter.class)
+@PropertySource("classpath:aurora-openshift-spring-boot-starter.properties")
 public class ApplicationConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(ApplicationConfig.class);
