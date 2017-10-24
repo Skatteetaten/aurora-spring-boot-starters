@@ -6,9 +6,7 @@ import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -20,9 +18,8 @@ import org.springframework.core.env.PropertiesPropertySource;
  * This should be moved to a repo of its own.
  */
 @Configuration
-@ConditionalOnProperty("db.properties")
 @Profile("openshift")
-public class DatabaseConfig implements InitializingBean {
+public class DatabaseConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(DatabaseConfig.class);
     private final String propertiesEnv;
@@ -38,21 +35,6 @@ public class DatabaseConfig implements InitializingBean {
         }
     }
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        Properties props = getProperties();
-        if (props == null) {
-            return;
-        }
-
-        logger.debug("Found database property with url:{}, username:{}, password:{}",
-            props.getProperty("jdbc.url"), props.getProperty("jdbc.user"), props.getProperty("jdbc.password").length());
-        System.setProperty("spring.datasource.url", props.getProperty("jdbc.url"));
-        System.setProperty("spring.datasource.username", props.getProperty("jdbc.user"));
-        System.setProperty("spring.datasource.password", props.getProperty("jdbc.password"));
-
-    }
-
     @Bean
     public PropertiesPropertySource databaseProperties() throws IOException {
 
@@ -60,8 +42,16 @@ public class DatabaseConfig implements InitializingBean {
         if (props == null) {
             return null;
         }
+
+        logger.debug("Found database property with url:{}, username:{}, password:{}", props.getProperty("jdbc.url"),
+            props.getProperty("jdbc.user"), props.getProperty("jdbc.password").length());
+        Properties datasourceProps = new Properties();
+        datasourceProps.setProperty("spring.datasource.url", props.getProperty("jdbc.url"));
+        datasourceProps.setProperty("spring.datasource.username", props.getProperty("jdbc.username"));
+        datasourceProps.setProperty("spring.datasource.password", props.getProperty("jdbc.password"));
+
         PropertiesPropertySource pps = new PropertiesPropertySource(
-            "auroraDatabase[db]", props);
+            "auroraDatabase[db]", datasourceProps);
         env.getPropertySources().addLast(pps);
 
         return pps;
