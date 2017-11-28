@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>no.skatteetaten.aurora.springboot</groupId>
   <artifactId>aurora-spring-boot-starter</artifactId>
-  <version>3.3-SNAPSHOT</version>
+  <version>feature_AOS_2184-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>aurora-spring-boot-starter</name>
@@ -108,7 +108,7 @@
         <plugin>
           <groupId>no.skatteetaten.aurora.maven.plugins</groupId>
           <artifactId>aurora-cd</artifactId>
-          <version>3.0.0</version>
+          <version>3.1.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
