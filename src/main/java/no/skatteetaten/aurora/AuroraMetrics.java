@@ -38,10 +38,8 @@ public class AuroraMetrics {
         } finally {
 
             List<Tag> tags = new ArrayList<>();
-            tags.addAll(inputTags);
             tags.add(Tag.of("result", result));
             tags.add(Tag.of("name", name));
-
             tags.addAll(inputTags);
 
             Timer.builder("operations")
