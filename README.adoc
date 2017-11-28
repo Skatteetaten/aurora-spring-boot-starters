@@ -43,8 +43,6 @@ import org.springframework.context.annotation.Import;
 import io.micrometer.spring.autoconfigure.export.StringToDurationConverter;
 
 @SpringBootApplication
-@Configuration
-@Import(StringToDurationConverter.class)
 public class Main {
 
     protected Main() {
@@ -56,18 +54,7 @@ public class Main {
 }
 ----
 
-Add the following to your application.yaml file
-[source]
-----
-spring:
-    metrics:
-        prometheus:
-            timerPercentilesMax: "PT5S"
-            timerPercentilesMin: "PT0.1S"
-----
 
-There is a bug in micrometer 1.0.0-rc2 prometheus support that required the manual import of the StringToDurationConverter, this also prohibits us from setting default vaules for timerPercentils.
-This will be fixed in an upcomming version of this starter.
 
 == Features
 
@@ -131,12 +118,20 @@ To get an overview of how Micrometer works we encourage you to read the Micromet
 https://micrometer.io/docs/prometheus. Especially the Spring Support section (https://micrometer.io/docs/prometheus#_spring_support)
 that will describe what is auto configured for you, and what you get out of the box in a Spring Boot application.
 
-Outgoing and incomming HTTP metrics have timerPercentiles set by default.
+Outgoing and incomming HTTP metrics have by default percentils turned on and has buckets between 100ms and 5s.
 [source]
 ----
-spring.metrics.web.client.record-request-percentiles=true
-spring.metrics.web.server.record-request-percentiles=true
+spring.metrics:
+    web:
+        client.record-request-percentiles=true
+        server.record-request-percentiles=true
+    filter.http:
+        client.requests.maximumExpectedValue=5s
+        client.requests.minimumExpectedValue=100ms
+        server.requests.maximumExpectedValue=5s
+        server.requests.minimumExpectedValue=100ms
 ----
+
 
 === Auto registration of DataSource
 

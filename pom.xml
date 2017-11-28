@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>no.skatteetaten.aurora.springboot</groupId>
   <artifactId>aurora-spring-boot-starter</artifactId>
-  <version>3.3-SNAPSHOT</version>
+  <version>3.4-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>aurora-spring-boot-starter</name>
@@ -11,7 +11,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.5.8.RELEASE</version>
+    <version>1.5.9.RELEASE</version>
     <relativePath /> <!-- lookup parent from repository -->
   </parent>
 
@@ -50,7 +50,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
     <maven.min-version>3.3.3</maven.min-version>
-    <micrometer.version>1.0.0-rc.2</micrometer.version>
+    <micrometer.version>1.0.0-rc.5</micrometer.version>
   </properties>
 
 
@@ -66,7 +66,7 @@
     <dependency>
       <groupId>no.skatteetaten.aurora</groupId>
       <artifactId>aurora-header-mdc-filter</artifactId>
-      <version>2.0.0</version>
+      <version>2.0.1</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -77,11 +77,23 @@
       <groupId>io.micrometer</groupId>
       <artifactId>micrometer-spring-legacy</artifactId>
       <version>${micrometer.version}</version>
+
     </dependency>
     <dependency>
       <groupId>io.micrometer</groupId>
       <artifactId>micrometer-registry-prometheus</artifactId>
       <version>${micrometer.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.latencyutils</groupId>
+      <artifactId>LatencyUtils</artifactId>
+      <version>2.0.3</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.hdrhistogram</groupId>
+          <artifactId>HdrHistogram</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 
@@ -96,7 +108,7 @@
         <plugin>
           <groupId>no.skatteetaten.aurora.maven.plugins</groupId>
           <artifactId>aurora-cd</artifactId>
-          <version>3.0.0</version>
+          <version>3.1.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
