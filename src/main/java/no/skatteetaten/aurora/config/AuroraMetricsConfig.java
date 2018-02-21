@@ -6,8 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.core.instrument.binder.jvm.JvmGcMetrics;
-import io.micrometer.core.instrument.binder.jvm.JvmThreadMetrics;
 import io.micrometer.core.instrument.config.MeterFilter;
 import io.micrometer.spring.autoconfigure.MeterRegistryCustomizer;
 
@@ -24,16 +22,6 @@ public class AuroraMetricsConfig {
             .meterFilter(MeterFilter.maxExpected("http", Duration.ofSeconds(MAX_SECONDS)))
             .meterFilter(MeterFilter.minExpected("operations", Duration.ofMillis(MIN_MILLIS)))
             .meterFilter(MeterFilter.maxExpected("operations", Duration.ofSeconds(MAX_SECONDS)));
-    }
-
-    @Bean
-    JvmThreadMetrics threadMetrics() {
-        return new JvmThreadMetrics();
-    }
-
-    @Bean
-    JvmGcMetrics gcMetrics() {
-        return new JvmGcMetrics();
     }
 
 }

@@ -40,8 +40,6 @@ public class ApplicationConfig {
         this.env = env;
     }
 
-
-
     @Bean
     public GracefulShutdown gs() {
         return new GracefulShutdown();
