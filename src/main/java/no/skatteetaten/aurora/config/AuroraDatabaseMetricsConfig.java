@@ -12,7 +12,7 @@ import org.springframework.boot.autoconfigure.jdbc.metadata.DataSourcePoolMetada
 import org.springframework.context.annotation.Configuration;
 
 import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.spring.jdbc.DataSourceMetrics;
+import io.micrometer.spring.jdbc.DataSourcePoolMetrics;
 
 @Configuration
 @ConditionalOnBean(DataSource.class)
@@ -30,7 +30,7 @@ class AuroraDatabaseMetricsConfig {
     @PostConstruct
     private void instrumentDataSource() {
 
-        new DataSourceMetrics(
+        new DataSourcePoolMetrics(
             dataSource,
             metadataProviders,
             "data.source",

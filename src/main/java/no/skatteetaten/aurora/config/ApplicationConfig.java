@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,6 +39,8 @@ public class ApplicationConfig {
     public ApplicationConfig(ConfigurableEnvironment env) {
         this.env = env;
     }
+
+
 
     @Bean
     public GracefulShutdown gs() {
@@ -132,8 +135,8 @@ public class ApplicationConfig {
 
     @ConditionalOnMissingBean(RestTemplate.class)
     @Bean
-    RestTemplate restTemplate() {
-        return new RestTemplate();
+    RestTemplate restTemplate(RestTemplateBuilder builder) {
+        return builder.build();
     }
 
 }

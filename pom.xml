@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>no.skatteetaten.aurora.springboot</groupId>
   <artifactId>aurora-spring-boot-starter</artifactId>
-  <version>3.4-SNAPSHOT</version>
+  <version>3.5-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>aurora-spring-boot-starter</name>
@@ -11,8 +11,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.5.9.RELEASE</version>
-    <relativePath /> <!-- lookup parent from repository -->
+    <version>1.5.10.RELEASE</version>
   </parent>
 
   <licenses>
@@ -50,7 +49,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
     <maven.min-version>3.3.3</maven.min-version>
-    <micrometer.version>1.0.0-rc.5</micrometer.version>
+    <micrometer.version>1.0.0</micrometer.version>
   </properties>
 
 
@@ -84,6 +83,7 @@
       <artifactId>micrometer-registry-prometheus</artifactId>
       <version>${micrometer.version}</version>
     </dependency>
+    <!--
     <dependency>
       <groupId>org.latencyutils</groupId>
       <artifactId>LatencyUtils</artifactId>
@@ -94,7 +94,7 @@
           <artifactId>HdrHistogram</artifactId>
         </exclusion>
       </exclusions>
-    </dependency>
+    </dependency>-->
   </dependencies>
 
   <build>
