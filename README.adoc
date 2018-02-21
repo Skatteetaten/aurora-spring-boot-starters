@@ -30,32 +30,6 @@ Include the starter as a dependency
 </dependency>
 ----
 
-Adjust your maven start class to look like this
-
-
-[source, java]
-----
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-
-import io.micrometer.spring.autoconfigure.export.StringToDurationConverter;
-
-@SpringBootApplication
-public class Main {
-
-    protected Main() {
-    }
-
-    public static void main(String[] args) throws Exception {
-        SpringApplication.run(Main.class, args);
-    }
-}
-----
-
-
-
 == Features
 
 === Register the Aurora Header MDC Filter
@@ -113,25 +87,30 @@ Additionally a number of Micrometer metrics collectors will be automatically reg
 * LogbackMetrics
 * UptimeMetrics
 * FileDescriptorMetrics
+* DataSourceMetrics
+* RestTemplateMetrics
+* TomcatMetrics
 
 To get an overview of how Micrometer works we encourage you to read the Micrometer docs:
-https://micrometer.io/docs/prometheus. Especially the Spring Support section (https://micrometer.io/docs/prometheus#_spring_support)
-that will describe what is auto configured for you, and what you get out of the box in a Spring Boot application.
+https://micrometer.io/docs. Relevant sections are http://micrometer.io/docs/concepts, http://micrometer.io/docs/registry/prometheus and http://micrometer.io/docs/ref/spring/1.5
 
-Outgoing and incomming HTTP metrics have by default percentils turned on and has buckets between 100ms and 5s.
+Outgoing and incomming HTTP metrics have by default percentiles turned on and has buckets between 100ms and 5s.
 [source]
 ----
-spring.metrics:
-    web:
-        client.record-request-percentiles=true
-        server.record-request-percentiles=true
-    filter.http:
-        client.requests.maximumExpectedValue=5s
-        client.requests.minimumExpectedValue=100ms
-        server.requests.maximumExpectedValue=5s
-        server.requests.minimumExpectedValue=100ms
+management.metrics.distribution.percentiles-histogram.http=true
 ----
 
+There are default min/max buckets set to 100ms to 5secounds for http and operations metrics
+
+If you would like to change these use the following bean in your code
+
+[source]
+----
+ @Bean
+    MeterFilter minExpectedHttp() {
+        return MeterFilter.minExpected("http", Duration.ofMillis(200));
+    }
+----
 
 === Auto registration of DataSource
 
