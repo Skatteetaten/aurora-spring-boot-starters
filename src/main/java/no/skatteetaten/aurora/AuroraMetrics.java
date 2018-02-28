@@ -1,8 +1,8 @@
 package no.skatteetaten.aurora;
 
-import static java.util.Collections.emptyList;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
@@ -23,10 +23,14 @@ public class AuroraMetrics {
     }
 
     public <T> T withMetrics(String name, Supplier<T> s) {
-        return withMetrics(name, emptyList(), s);
+        return withMetricsInternal("operations", Arrays.asList(Tag.of("name", name)), s);
     }
 
     public <T> T withMetrics(String name, List<Tag> inputTags, Supplier<T> s) {
+        return withMetricsInternal("operations_" + name, inputTags, s);
+    }
+
+    private <T> T withMetricsInternal(String name, List<Tag> inputTags, Supplier<T> s) {
         long startTime = System.nanoTime();
 
         String result = "success";
@@ -39,10 +43,9 @@ public class AuroraMetrics {
 
             List<Tag> tags = new ArrayList<>();
             tags.add(Tag.of("result", result));
-            tags.add(Tag.of("name", name));
             tags.addAll(inputTags);
 
-            Timer.builder("operations")
+            Timer.builder(name)
                 .tags(tags)
                 .description("Manual operation that we want metrics on")
                 .publishPercentileHistogram()
@@ -52,18 +55,21 @@ public class AuroraMetrics {
     }
 
     public void status(String name, StatusValue value) {
-        status(name, value, emptyList());
+        statusInternal("", value, Arrays.asList(Tag.of("name", name)));
     }
 
     public void status(String name, StatusValue value, List<Tag> inputTags) {
+        statusInternal("_" + name, value, inputTags);
+    }
+
+    private void statusInternal(String name, StatusValue value, List<Tag> inputTags) {
 
         List<Tag> tags = new ArrayList<>();
         tags.addAll(inputTags);
-        tags.add(Tag.of("name", name));
 
-        registry.gauge("last_status", tags, value.getValue());
+        registry.gauge("last_status" + name, tags, value.getValue());
         tags.add(Tag.of("status", value.name()));
-        registry.counter("statuses", tags).increment();
+        registry.counter("statuses" + name, tags).increment();
     }
 
     public enum StatusValue {
