@@ -11,8 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +20,6 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertiesPropertySource;
 import org.springframework.web.client.RestTemplate;
 
-import no.skatteetaten.aurora.GracefulShutdown;
 import no.skatteetaten.aurora.filter.logging.AuroraHeaderFilter;
 
 /**
@@ -38,22 +35,6 @@ public class ApplicationConfig {
 
     public ApplicationConfig(ConfigurableEnvironment env) {
         this.env = env;
-    }
-
-    @Bean
-    public GracefulShutdown gs() {
-        return new GracefulShutdown();
-    }
-
-    @Bean
-    public EmbeddedServletContainerCustomizer tomcatCustomizer(GracefulShutdown gs) {
-        return configurableEmbeddedServletContainer -> {
-            if (configurableEmbeddedServletContainer instanceof TomcatEmbeddedServletContainerFactory) {
-                logger.debug("customize tomcat");
-                ((TomcatEmbeddedServletContainerFactory) configurableEmbeddedServletContainer)
-                    .addConnectorCustomizers(gs);
-            }
-        };
     }
 
     /**
